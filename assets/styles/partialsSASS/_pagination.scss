@@ -1,0 +1,33 @@
+// @use 'variables' as *;
+
+/* ////////////////////PAGINATION////////////////// */
+/* Style des liens de pagination */
+.page-item.active .page-link {
+  background-color: #6c757d !important;
+  border-color: #6c757d !important;
+  color: white !important;
+}
+
+.page-link {
+  color: #6c757d !important;
+}
+
+.page-link:hover {
+  background-color: #e9ecef !important;
+  color: #6c757d !important;
+}
+
+/* Correction responsive — évite que la pagination déborde en mobile */
+.pagination {
+  flex-wrap: wrap; /* Permet le retour à la ligne */
+  justify-content: center; /* Centre même sur plusieurs lignes */
+  gap: 0.25rem; /* Espace propre entre boutons */
+}
+
+/* Options spécifiques mobile pour éviter le débordement */
+@media (max-width: 575.98px) {
+  .page-link {
+    padding: 0.35rem 0.6rem; /* Réduit légèrement les boutons */
+    font-size: 0.9rem; /* Empêche les textes d'être trop larges */
+  }
+}

@@ -1,0 +1,32 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+parameters:
+  openai.api_key: "%env(OPENAI_API_KEY)%"
+
+services:
+  # Default configuration for services in this file
+  _defaults:
+    autowire: true # Injecte automatiquement les dépendances.
+    autoconfigure: true # Enregistre automatiquement tes services comme commandes, listeners, etc.
+
+  # Rend les classes dans src/ disponibles en tant que services
+  # Cela crée un service par classe dont l'id est le nom complet de la classe
+  App\:
+    resource: "../src/"
+    exclude:
+      - "../src/DependencyInjection/"
+      - "../src/Entity/"
+      - "../src/Kernel.php"
+
+  App\Twig\AppExtension:
+    arguments: ['@App\Repository\CategoryRepository']
+    tags:
+      - { name: twig.extension }
+
+  App\Service\ImageUploaderService:
+    arguments:
+      $params: "@parameter_bag"
+
+  App\Service\ImageAnalyzerService:
+    arguments:
+      $openaiToken: "%openai.api_key%"

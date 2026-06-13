@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Éditer la catégorie
+	{{ category.name }}
+{% endblock %}
+
+{% block body %}
+	<section>
+		<div class="header-container">
+
+			<h1>Éditer la catégorie
+				{{ category.name }}
+			</h1>
+		</div>
+		{{ form_start(form) }}
+
+		{{ form_row(form.name) }}
+		{{ form_row(form.slug) }}
+		{# Ajoute d'autres champs si besoin #}
+
+		{# Bouton enregistrer avec classe personnalisée #}
+		{{ form_widget(form.save, { 'attr': {'class': 'btn btn-secondary btn-sm'} }) }}
+
+	{{ form_end(form) }}
+
+</section>{% endblock %}

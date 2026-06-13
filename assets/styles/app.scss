@@ -1,0 +1,25 @@
+// ====================== BASE ======================
+@use "./base/base";
+
+// ====================== VARIABLES ======================
+// @use "./partialsSASS/variables";
+
+// ====================== PARTIALS ======================
+@use "./partialsSASS/lightbox";
+@use "./partialsSASS/slider";
+@use "./partialsSASS/slideshow";
+@use "./partialsSASS/card-preview";
+@use "./partialsSASS/filter-oeuvres";
+@use "./partialsSASS/form-research";
+@use "./partialsSASS/navbar";
+@use "./partialsSASS/mosaic";
+@use "./partialsSASS/pagination";
+@use "./partialsSASS/comment";
+
+// ====================== LAYOUT ======================
+@use "./layout/footer";
+
+// ====================== PAGES ======================
+@use "./page/contact";
+@use "./page/mentions-legales";
+@use "./page/login";

@@ -1,0 +1,59 @@
+{
+  "name": "navarrojeanpierre",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "encore dev --watch",
+    "dev-server": "encore dev-server --hot",
+    "build": "encore production",
+    "sass-watch": "sass --watch assets/styles/app.scss:public/styles/app.css",
+    "watch": "encore dev --watch",
+    "minify-images": "node scripts/minify-images.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raphael25200/navarrojeanpierre.git"
+  },
+  "author": "navarroraphael",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/raphael25200/navarrojeanpierre/issues"
+  },
+  "homepage": "https://github.com/raphael25200/navarrojeanpierre#readme",
+  "devDependencies": {
+    "@hotwired/stimulus": "^3.2.2",
+    "@symfony/stimulus-bridge": "^4.0.1",
+    "@symfony/webpack-encore": "^5.2.0",
+    "core-js": "^3.45.1",
+    "file-loader": "^6.2.0",
+    "imagemin-cli": "^8.0.0",
+    "imagemin-gifsicle": "^7.0.0",
+    "imagemin-mozjpeg": "^10.0.0",
+    "imagemin-pngquant": "^10.0.0",
+    "imagemin-svgo": "^11.0.1",
+    "regenerator-runtime": "^0.14.1",
+    "resolve-url-loader": "^5.0.0",
+    "webpack": "^5.101.3",
+    "webpack-cli": "^6.0.1"
+  },
+  "dependencies": {
+    "@babel/core": "^7.28.3",
+    "@babel/preset-env": "^7.28.3",
+    "@hotwired/turbo": "^8.0.13",
+    "@symfony/ux-turbo": "file:vendor/symfony/ux-turbo/assets",
+    "autoprefixer": "^10.4.21",
+    "babel-loader": "^10.0.0",
+    "bootstrap": "^5.3.8",
+    "css-loader": "^7.1.2",
+    "mini-css-extract-plugin": "^2.9.4",
+    "postcss": "^8.5.6",
+    "postcss-loader": "^8.1.1",
+    "sass": "^1.91.0",
+    "sass-loader": "^16.0.5"
+  }
+}

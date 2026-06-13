@@ -1,0 +1,51 @@
+<div class="filter-wrapper">
+	{{ form_start(form) }}
+	<div class="filter-fields">
+
+		<div class="filter-field">
+			<h3>Catégories</h3>
+
+			{% if disable_categories is defined and disable_categories %}
+				{% for checkbox in form.categories %}
+					<div class="form-check">
+						{{ form_widget(checkbox, { attr: { disabled: 'disabled' } }) }}
+						{{ form_label(checkbox) }}
+					</div>
+					{% if checkbox.vars.data %}
+						<input type="hidden" name="{{ checkbox.vars.full_name }}" value="{{ checkbox.vars.value }}">
+					{% endif %}
+				{% endfor %}
+			{% else %}
+				{{ form_row(form.categories) }}
+			{% endif %}
+			<div class="filter-field">
+				<h3>Tri par année</h3>
+				{{ form_row(form.order) }}
+			</div>
+		</div>
+		<div class="filter-field">
+			<h3>Orientation</h3>
+			{{ form_row(form.orientation) }}
+		</div>
+
+		<div class="filter-field">
+			<h3>Année</h3>
+			{{ form_row(form.year) }}
+
+			<h3>Acquérir</h3>
+			{{ form_row(form.forsale) }}
+		</div>
+
+		<div class="filter-field">
+			<h3>Rechercher</h3>
+			{{ form_row(form.q) }}
+
+			<button type="submit" class="btn btn-secondary ">Filtrer</button>
+			<div class="results-info ">
+				<span class="results-count">{{ results_count }}
+					œuvre{{ results_count > 1 ? 's' : '' }}</span>
+			</div>
+		</div>
+	</div>
+	{{ form_end(form) }}
+</div>

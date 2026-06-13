@@ -1,0 +1,74 @@
+// @use 'variables' as *;
+
+// Variables réutilisables
+$primary-color: #007bff;
+$primary-color-hover: #0056b3;
+$border-color-light: #ccc;
+$border-radius-small: 4px;
+$border-radius-pill: 15px;
+$bg-light: #f7f7f7;
+
+// //////////////////// FORMULAIRE DE RECHERCHE ////////////////////
+.search-form {
+  display: flex;
+  align-items: center;
+
+  .search-input {
+    border: 1px solid $border-color-light;
+    padding: 8px 10px;
+    border-radius: $border-radius-small;
+  }
+
+  .search-button {
+    background-color: $primary-color;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    margin-left: 10px;
+    border-radius: $border-radius-small;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $primary-color-hover;
+    }
+  }
+}
+
+// //////////////////// COMPTE RESULTATS ////////////////////
+.results-info {
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: $bg-light;
+  border-radius: $border-radius-small;
+
+  .results-count {
+    font-size: 16px;
+  }
+
+  .active-filters {
+    display: inline-block;
+    margin-left: 20px;
+
+    .filter-tag {
+      display: inline-block;
+      margin: 5px;
+      padding: 5px 10px;
+      background-color: $primary-color;
+      color: white;
+      border-radius: $border-radius-pill;
+      font-size: 14px;
+
+      button {
+        color: white;
+        background: none;
+        border: none;
+        cursor: pointer;
+        margin-left: 5px;
+
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+}

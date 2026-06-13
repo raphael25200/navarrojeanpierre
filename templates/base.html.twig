@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>
+			{% block title %}Jean-Pierre Navarro — Peintre
+			{% endblock %}
+		</title>
+
+		{% block meta_description %}
+			<meta name="description" content="Découvrez l'œuvre de Jean-Pierre Navarro, peintre impressionniste autodidacte. Plus de 300 tableaux : paysages, portraits, natures mortes.">
+		{% endblock %}
+
+		{% block canonical %}{% endblock %}
+
+		{% block structured_data %}{% endblock %}
+
+		<link rel="icon" href="{{ asset('favicon.ico') }}">
+
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Parkinsans:wght@300..800&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+		{% block stylesheets %}
+			{{ encore_entry_link_tags('app') }}
+		{% endblock %}
+		{% block javascripts %}
+			{{ encore_entry_script_tags('app') }}
+			<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+		{% endblock %}
+	</head>
+
+	<body class="{% if app.request.attributes.get('_route') == 'home' %}home-page{% endif %}">
+
+		<div class="page-wrapper d-flex flex-column min-vh-100">
+			{% if is_granted('ROLE_ADMIN') %}
+				<div class="admin-navbar-wrapper">
+					{% include 'partials/admin_navbar.html.twig' %}
+				</div>
+			{% endif %}
+
+			{% include 'partials/navbar.html.twig' %}
+
+			{% block fullwidth %}{% endblock %}
+
+			<div class="container flex-grow-1">
+				<div class="flash-global">
+					{% include 'partials/flash.html.twig' %}
+				</div>
+				{% block body %}{% endblock %}
+			</div>
+
+			{% include 'partials/footer.html.twig' %}
+		</div>
+
+	</body>
+</html>

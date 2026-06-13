@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+ {% block javascripts %}
+             {{ parent ()}}
+        {% endblock %}
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+<section class="mentions-legales">
+  <h1>Mentions légales — Site officiel de Jean-Pierre Navarro</h1>
+
+  <h2>Éditeur du site</h2>
+  <p>
+    <strong>Nom :</strong> Raphaël Navarro<br>
+    <strong>Adresse :</strong> 14 rue Pasteur 25400 Exincourt <br>
+    <strong>E-mail :</strong> navarroraphael@yahoo.fr<br>
+    <strong>Statut :</strong> Représentant des ayants droit de Jean-Pierre Navarro
+  </p>
+
+  <h2>Responsable de la publication</h2>
+  <p>Raphaël Navarro</p>
+
+  <h2>Hébergement du site</h2>
+  <p>
+    <strong>Hébergeur :</strong> [Nom de l’hébergeur]<br>
+    <strong>Adresse :</strong> [Adresse postale de l’hébergeur]<br>
+    <strong>Site :</strong> <a href="[Lien hébergeur]" target="_blank">[Nom du site hébergeur]</a>
+  </p>
+
+  <h2>Propriété intellectuelle</h2>
+  <p>
+    Toutes les œuvres présentées sont des créations originales de Jean-Pierre Navarro (1946–2024),
+    protégées par le Code de la propriété intellectuelle.
+  </p>
+  <p>
+    Les droits sont détenus par ses ayants droit : <strong>Margie Navarro</strong> (son épouse),
+    <strong>Joanna Goguillot</strong>, <strong>Tanya Navarro</strong> et <strong>Raphaël Navarro</strong> (ses 3 enfants) .
+  </p>
+  <p>Toute reproduction ou utilisation sans autorisation écrite est interdite.</p>
+
+  <h2>Données personnelles</h2>
+  <p>
+    Aucune donnée personnelle n’est collectée sans votre consentement.
+    Pour toute demande : <a href="mailto:[Votre email]">[Votre email]</a>
+  </p>
+
+  <h2>Cookies</h2>
+  <p>Ce site utilise uniquement des cookies techniques. Aucun suivi publicitaire n’est effectué.</p>
+
+  <h2>Responsabilité</h2>
+  <p>
+    L’éditeur veille à l’exactitude des informations, sans garantir l’absence d’erreurs ou de coupures techniques.
+  </p>
+</section>
+
+
+{% endblock %}

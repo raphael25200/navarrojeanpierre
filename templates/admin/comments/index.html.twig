@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des commentaires
+{% endblock %}
+
+{% block body %}
+	<section>
+		<div class="header-container">
+			<h1>Commentaires</h1>
+		</div>
+
+		{% for label, messages in app.flashes %}
+			{% for message in messages %}
+				<div class="alert alert-{{ label }}">
+					{{ message }}
+				</div>
+			{% endfor %}
+		{% endfor %}
+
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Tableau</th>
+					<th>Auteur</th>
+					<th>Email visible</th>
+					<th>Commentaire</th>
+					<th>Date</th>
+					<th>Publié</th>
+					<th style="width: 200px">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for avis in allAvis %}
+					<tr>
+						<td>{{ avis.id }}</td>
+						<td>
+							{% if avis.tableau %}
+								<a href="{{ path('admin.tableau.edit', {'id': avis.tableau.id}) }}">
+									{{ avis.tableau.title }}
+								</a>
+							{% else %}
+								-
+							{% endif %}
+						</td>
+						<td>{{ avis.pseudo ?: 'Anonyme' }}</td>
+						<td>{{ avis.showEmail ? 'Oui' : 'Non' }}</td>
+						<td>{{ avis.content }}</td>
+						<td>{{ avis.createdAt ? avis.createdAt|date('d/m/Y H:i') : '-' }}</td>
+						<td>{{ avis.isPublished ? 'Oui' : 'Non' }}</td>
+						<td>
+							<div class="d-flex gap-1">
+								{% if not avis.isPublished %}
+									<form action="{{ path('admin.comments.publish', {'id': avis.id}) }}" method="post" style="display:inline">
+										<input type="hidden" name="_token" value="{{ csrf_token('publish' ~ avis.id) }}">
+										<button class="btn btn-success btn-sm" type="submit">Publier</button>
+									</form>
+								{% endif %}
+								<form action="{{ path('admin.comments.reject', {'id': avis.id}) }}" method="post" style="display:inline" onsubmit="return confirm('Supprimer ce commentaire ?');">
+									<input type="hidden" name="_token" value="{{ csrf_token('reject' ~ avis.id) }}">
+									<button class="btn btn-danger btn-sm" type="submit">Rejeter</button>
+								</form>
+							</div>
+						</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="8" class="text-center">Aucun commentaire trouvé.</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</section>
+{% endblock %}

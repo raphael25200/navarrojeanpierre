@@ -1,0 +1,50 @@
+// @use 'variables' as *;
+
+// Variables réutilisables
+$color-grey-dark: #555;
+$color-bg-light-opacity: rgba(255, 255, 255, 0.6);
+$color-bg-light-hover: rgba(255, 255, 255, 0.9);
+$border-radius-small: 6px;
+$box-shadow-light: 0 0 4px rgba(0, 0, 0, 0.1);
+$transition-slow: 0.9s ease;
+$gap-small: 6px;
+$footer-z: 1999;
+
+// //////////////////// FOOTER BOTTOM RIGHT ////////////////////
+.footer-bottom-right {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-size: 0.85rem;
+  color: $color-grey-dark;
+  background-color: $color-bg-light-opacity;
+  padding: 6px 12px;
+  border-radius: $border-radius-small;
+  box-shadow: $box-shadow-light;
+  width: 70px; // taille réduite par défaut
+  white-space: nowrap;
+  overflow: hidden;
+  transition: width $transition-slow, background-color $transition-slow;
+  cursor: pointer;
+  z-index: $footer-z;
+  display: flex;
+  align-items: center;
+  gap: $gap-small;
+
+  &:hover {
+    width: 360px;
+    background-color: $color-bg-light-hover;
+
+    .footer-content {
+      opacity: 1;
+    }
+  }
+
+  .footer-content {
+    opacity: 0;
+    transition: opacity $transition-slow;
+    margin-left: 2px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+}

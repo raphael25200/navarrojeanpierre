@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion catégories
+{% endblock %}
+
+{% block body %}
+	<section>
+		<div class="header-container">
+
+			<p>
+				<a class="btn btn-secondary btn-sm" href="{{ path('admin.category.create') }}" style="margin-top: 3rem;">Ajouter une catégorie</a>
+			</p>
+		</div>
+
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Nom</th>
+					<th style="width: 200px">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for category in categories %}
+					<tr>
+						<td>{{ category.name }}</td>
+						<td>
+							<div class="d-flex gap-1">
+								<a class="btn btn-light btn-sm" href="{{ path('admin.category.edit', {id: category.id}) }}">Éditer</a>
+								<form action="{{ path('admin.category.delete', {id: category.id}) }}" method="post" onsubmit="return confirm('Supprimer cette catégorie ?');" style="display:inline;">
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ category.id) }}">
+									<button class="btn btn-secondary btn-sm" type="submit">Supprimer</button>
+								</form>
+							</div>
+						</td>
+					</tr>
+
+				{% endfor %}
+			</tbody>
+		</table>
+	</section>
+{% endblock %}

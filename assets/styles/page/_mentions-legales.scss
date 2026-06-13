@@ -1,0 +1,56 @@
+// @use 'variables' as *;
+
+/* MENTIONS LEGALES */
+
+.mentions-legales {
+  max-width: 800px;
+  margin: 4rem auto;
+  padding: 2rem;
+  background-color: #fdfdfd;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  color: #333;
+  line-height: 1.6;
+}
+
+.mentions-legales h1 {
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 0.5rem;
+}
+
+.mentions-legales h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #444;
+  margin-top: 1.5rem;
+}
+
+.mentions-legales p {
+  margin: 0.5rem 0;
+}
+
+.mentions-legales a {
+  color: #0077aa;
+  text-decoration: none;
+}
+
+.mentions-legales a:hover {
+  text-decoration: underline;
+}
+
+@media screen and (max-width: 600px) {
+  .mentions-legales {
+    padding: 1rem;
+    margin: 2rem 1rem;
+  }
+
+  .mentions-legales h1 {
+    font-size: 1.4rem;
+  }
+
+  .mentions-legales h2 {
+    font-size: 1rem;
+  }
+}

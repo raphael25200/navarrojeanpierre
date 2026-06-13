@@ -1,0 +1,233 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Jean-Pierre Navarro — Biographie du peintre
+{% endblock %}
+
+{% block meta_description %}
+	<meta name="description" content="Biographie de Jean-Pierre Navarro, peintre impressionniste autodidacte né en 1946 à Audincourt. De Tahiti à la Franche-Comté, une vie dédiée à la peinture.">
+{% endblock %}
+
+{% block body %}
+
+	<style>
+		html,
+		body {
+			margin: 0;
+			padding: 0;
+			width: 100%;
+			overflow-x: hidden;
+		}
+
+		.parallax {
+			position: relative;
+
+			left: 50%;
+			right: 50%;
+			margin-left: -50vw;
+			margin-right: -50vw;
+
+			width: 100vw;
+			min-height: 100vh;
+
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-attachment: fixed;
+		}
+
+
+		/* =========================
+   PARALLAX OVERLAY (HERO)
+   ========================= */
+
+		.parallax-overlay {
+			min-height: 100vh;
+			background: rgba(0, 0, 0, 0.35);
+
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+
+			color: #ffffff;
+			text-align: center;
+			padding: 2rem;
+		}
+
+		.parallax-overlay h1 {
+			font-size: clamp(2rem, 5vw, 3rem);
+			font-weight: 300;
+			letter-spacing: 0.1em;
+			margin-bottom: 1rem;
+		}
+
+		.parallax-overlay h3 {
+			font-size: clamp(1.1rem, 3vw, 1.4rem);
+			font-weight: 300;
+		}
+
+
+		/* =========================
+   TEXTE / BIO
+   ========================= */
+
+		.bio-section {
+			background: #ffffff;
+			max-width: 900px;
+			min-height: 90vh;
+
+			margin: 0 auto;
+			padding: 6rem 2rem;
+
+			line-height: 1.9;
+			font-size: 1.05rem;
+
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+
+			position: relative;
+			z-index: 2;
+		}
+
+		.bio-section h2 {
+			margin-bottom: 2rem;
+			font-weight: 300;
+			letter-spacing: 0.05em;
+			font-size: clamp(1.6rem, 4vw, 2rem);
+		}
+
+		.bio-section p {
+			margin-bottom: 1.5rem;
+		}
+
+
+		/* =========================
+   RESPONSIVE – TABLETTE
+   ========================= */
+
+		@media(max-width: 991px) {
+
+			.parallax {
+				min-height: 60vh;
+				background-attachment: scroll;
+			}
+
+			.parallax-overlay {
+				min-height: 60vh;
+			}
+
+			.bio-section {
+				min-height: auto;
+				padding: 3.5rem 1.5rem;
+				font-size: 1rem;
+			}
+		}
+
+
+		/* =========================
+   RESPONSIVE – MOBILE
+   ========================= */
+
+		@media(max-width: 576px) {
+
+			.parallax {
+				min-height: 50vh;
+			}
+
+			.parallax-overlay h1 {
+				font-size: 2rem;
+				margin-top: 80px;
+			}
+
+			.parallax-overlay h3 {
+				font-size: 1.1rem;
+			}
+
+			.bio-section h2 {
+				font-size: 1.4rem;
+			}
+
+			.bio-section {
+				padding: 3rem 1.25rem;
+			}
+		}
+	</style>
+
+	<!-- IMAGE 1 – HERO PARALLAX -->
+	<section class="parallax" style="background-image: url('{{ asset('images/images_sources/dsc1316-681cc475c4df2425980607.jpg') }}');">
+		<div class="parallax-overlay d-flex flex-column justify-content-center align-items-center text-center">
+			<h1>Jean-Pierre Navarro</h1>
+			<h3>Le temps d’une vie, le regard d’un peintre</h3>
+			<p style="margin-top: 2rem; font-size: 1.2rem; max-width: 800px;">
+				Peintre autodidacte, Jean-Pierre Navarro a traversé son époque avec discrétion, 
+																																																																																																																											le regard toujours attentif aux lieux, aux êtres et à la lumière. 
+																																																																																																																											Sa peinture, profondément figurative et impressionniste, s’est construite au fil du temps, 
+																																																																																																																											entre la Franche-Comté, les voyages, la vie de famille et une passion patiente 
+																																																																																																																											pour l’observation du monde.
+			</p>
+		</div>
+	</section>
+
+	<!-- TEXTE 1 -->
+	<section class="bio-section">
+		<h2>Une vie façonnée par l’observation et le voyage</h2>
+
+		<p>Jean-Pierre Navarro est né le 12 septembre 1946 à Audincourt. Aîné d’une fratrie de six enfants, il grandit à Montbéliard dans l’après-guerre, dans un quotidien simple où les petits bonheurs avaient la valeur de conquêtes silencieuses. Très tôt, il développe un regard attentif sur le monde, une sensibilité aux atmosphères et aux détails.</p>
+
+		<p>Après une scolarité classique pour l'époque, il entre dans la vie active dès l’âge de quinze ans par un apprentissage dans le bâtiment. Ce rapport direct à la matière, au geste et à la patience laissera une empreinte durable dans sa manière de créer.</p>
+
+		<p>En 1966, son service militaire dans la Marine nationale l’emmène vers le Pacifique. À Tahiti, Jean-Pierre découvre l’immensité de l’océan, la lumière, la douceur du climat et la richesse d’une culture profondément ancrée dans ses traditions.</p>
+	</section>
+
+	<!-- IMAGE 2 -->
+	<section class="parallax" style="background-image: url('{{ asset('images/images_sources/dsc1762-681cd09f4cc39086535614.jpg') }}'); background-position: center bottom;"></section>
+
+	<!-- TEXTE 2 -->
+	<section class="bio-section">
+		<h2>Tahiti, Gauguin et la naissance d’un regard</h2>
+
+		<p>Cette année passée en Polynésie agit comme une révélation. Jean-Pierre est profondément marqué par les paysages et par l’héritage laissé par Paul Gauguin, venu lui aussi chercher là-bas une autre manière de voir et de peindre.</p>
+
+		<p>À son retour en France, une nostalgie lumineuse l’accompagne durablement. Il reprend une vie professionnelle éclectique, travaillant notamment dans l’industrie puis comme agent de sécurité, tout en conservant en lui cette ouverture vers l’ailleurs.</p>
+
+		<p>Sa vie personnelle s’épanouit avec la rencontre de Margie, qu’il épouse en 1971. Ensemble, ils construisent une vie entre la France et les Pays-Bas, fondent une famille et traversent les années avec une fidélité et une solidité remarquables.</p>
+	</section>
+
+	<!-- IMAGE 3 -->
+	<section class="parallax" style="background-image:url('{{ asset('images/images_sources/dsc1878-68230d899e39a639337804.jpg') }}');"></section>
+
+	<!-- TEXTE 3 -->
+	<section class="bio-section">
+		<h2>La peinture comme nécessité</h2>
+
+		<p>Autodidacte, Jean-Pierre ne fréquente ni les Beaux-Arts ni l’atelier d’un maître. Sa formation est celle du regard, de l’expérimentation et du temps. Tout commence avec un simple nécessaire de peintre amateur offert par Margie.</p>
+
+		<p>Inspiré par les impressionnistes, il se nourrit de l’œuvre de Paul Gauguin, de Vincent Van Gogh et de Rembrandt pour le travail des portraits et de la lumière. Sa peinture est parfois figurative, tend vers l’hyperréalisme avec une précision quasi photographique, tout en restant toujours chargée d’émotion.</p>
+
+		<p>En 1993, la vie le frappe avec la disparition tragique de son fils Fabian, un événement qu’il traverse dans le silence et la retenue qui le caractérisent.</p>
+
+		<p>Il parcourt la campagne franc-comtoise, installe son chevalet, observe les ombres et les lumières sur les clochers et les paysages de sa région, et tente de suspendre le temps sur la toile. Sa recherche de la couleur juste, du mélange exact, devient une quête quotidienne.</p>
+	</section>
+
+	<!-- IMAGE 4 -->
+	<section class="parallax" style="background-image:url('{{ asset('images/images_sources/dsc1294-67ff8d52d9de7640648754.jpg') }}'); background-position: center top;"></section>
+
+	<!-- TEXTE 4 -->
+	<section class="bio-section">
+		<h2>Un héritage pictural</h2>
+
+		<p>L’œuvre de Jean-Pierre Navarro comprend plus de 500 toiles. Plus que le nombre, c’est l’intensité et la sincérité qui frappent : chaque tableau, qu’il le considère comme une réussite ou comme une simple expérimentation, témoigne de son regard attentif au réel et de sa profonde humanité. Ce site se veut un catalogue complet, sans distinction, pour refléter toute la richesse de son parcours artistique.</p>
+
+		<p>Discret et réservé, il se révélait intarissable lorsqu’il parlait de peinture. Ses tableaux ont rarement été exposés, mais il a présenté quelques œuvres vers la fin de sa vie, touchant ceux qui ont eu la chance de les découvrir et témoignant d’une approche humble et exigeante de l’art.</p>
+
+		<p>Aujourd’hui, ses tableaux restent le témoignage lumineux de son regard sur le monde. Ils racontent la famille, les paysages franc-comtois, la mer, la terre et la lumière, et traduisent ce besoin profond de saisir l’instant avant qu’il ne s’échappe.</p>
+
+		<p>Au-delà de ses œuvres, c’est aussi l’amour et la présence de sa famille — Margie, son épouse, Joanna, Tanya et Raphael, ainsi que la mémoire de son fils Fabian — qui continuent de porter son souvenir et de faire briller son héritage.</p>
+	</section>
+
+	<!-- IMAGE 5 -->
+	<section class="parallax" style="background-image:url('{{ asset('images/images_sources/	dsc1750-681ccc5102266401625343.jpg') }}'); background-position: center;"></section>
+
+
+{% endblock %}

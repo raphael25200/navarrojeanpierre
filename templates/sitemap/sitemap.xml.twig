@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+	<url>
+		<loc>https://www.navarrojeanpierre.com/</loc>
+		<priority>1.0</priority>
+	</url>
+
+	<url>
+		<loc>https://www.navarrojeanpierre.com/oeuvres</loc>
+		<priority>0.9</priority>
+	</url>
+
+	<url>
+		<loc>https://www.navarrojeanpierre.com/about</loc>
+		<priority>0.7</priority>
+	</url>
+
+	<url>
+		<loc>https://www.navarrojeanpierre.com/contact</loc>
+		<priority>0.5</priority>
+	</url>
+
+	{% for category in categories %}
+		<url>
+			<loc>https://www.navarrojeanpierre.com/category/{{ category.slug }}</loc>
+			<priority>0.8</priority>
+		</url>
+	{% endfor %}
+
+	{% for tableau in tableaux %}
+		<url>
+			<loc>https://www.navarrojeanpierre.com/oeuvre/{{ tableau.slug }}</loc>
+			{% if tableau.updatedAt %}
+				<lastmod>{{ tableau.updatedAt|date('Y-m-d') }}</lastmod>
+			{% endif %}
+			<priority>0.6</priority>
+		</url>
+	{% endfor %}
+
+</urlset>

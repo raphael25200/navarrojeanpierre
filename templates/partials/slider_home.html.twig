@@ -1,0 +1,41 @@
+<div class='section_home'>
+
+	<div class="swiper-container slideshow">
+
+		<div class="swiper-wrapper">
+
+			{% for tableau in tableaux %}
+				<div class="swiper-slide slide">
+					<div class="slide-image" style="background-image: url('{{ asset('images/images_sources/' ~ tableau.image) }}');"></div>
+					<h2 class="slide-title">{{ tableau.customTitle is not empty ? tableau.customTitle : tableau.title }}</h2>
+				</div>
+			{% else %}
+				<p>Aucune image à afficher dans le slider.</p>
+			{% endfor %}
+
+		</div>
+
+		<div class="slideshow-pagination"></div>
+
+
+		<div class="slideshow-navigation">
+			<div class="slideshow-navigation-button prev">
+				<span class="fas fa-chevron-left"></span>
+			</div>
+			<div class="slideshow-navigation-button next">
+				<span class="fas fa-chevron-right"></span>
+			</div>
+		</div>
+
+	</div>
+</div>
+<script>
+	window.addEventListener('scroll', function () {
+var navbar = document.querySelector('.bg-body-tertiary');
+if (window.scrollY > 56) { // Vous pouvez ajuster ce nombre à la hauteur de défilement souhaitée
+navbar.classList.add('scrolled');
+} else {
+navbar.classList.remove('scrolled');
+}
+});
+</script>

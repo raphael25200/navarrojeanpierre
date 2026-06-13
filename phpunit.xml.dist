@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         backupGlobals="false"
+         colors="true"
+         bootstrap="tests/bootstrap.php"
+         convertDeprecationsToExceptions="false">
+
+    <php>
+        <!-- Affichage des erreurs -->
+        <ini name="display_errors" value="1" />
+        <ini name="error_reporting" value="-1" />
+
+        <!-- Variables d'environnement pour Symfony -->
+        <server name="APP_ENV" value="test" force="true" />
+        <server name="APP_DEBUG" value="1" />
+        <server name="APP_SECRET" value="d62d502531e9aa463e9e4e74d76f459d" />
+
+        <!-- Base de données réelle "tableaux" -->
+        <server name="DATABASE_URL" value="mysql://root:@127.0.0.1:3306/tableaux?serverVersion=8.0&amp;charset=utf8mb4" />
+
+        <server name="KERNEL_CLASS" value="App\Kernel" />
+
+        <!-- Variables spécifiques PHPUnit/Symfony -->
+        <server name="SHELL_VERBOSITY" value="-1" />
+        <server name="SYMFONY_PHPUNIT_REMOVE" value="" />
+        <server name="SYMFONY_PHPUNIT_VERSION" value="9.5" />
+    </php>
+
+    <testsuites>
+        <testsuite name="Project Test Suite">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+    </coverage>
+
+    <listeners>
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
+    </listeners>
+</phpunit>

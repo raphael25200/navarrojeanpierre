@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Indexer un tableau
+{% endblock %}
+
+{% block body %}
+	<section>
+		<h1>Indexer un nouveau tableau</h1>
+
+		<div class="header-container">
+			{{ form_start(form) }}
+			{# Démarre le formulaire #}
+			<div
+				class="row">
+				<!-- Colonne pour l'image -->
+				<div class="col-md-6">
+					<div class="col-md-12">
+						<div
+							class="input-container">
+							{# Titre du tableau #}
+							{{ form_row(form.title) }}
+
+							{# Commentaires (juste en dessous du titre) #}
+							{{ form_row(form.commentaires) }}
+						</div>
+					</div>
+
+					<div
+						class="col-md-12">
+						{# Champ image (nom du fichier ou ancien fichier lié) #}
+						{{ form_row(form.image) }}
+
+						{# Aperçu de l'image uploadée #}
+						<img
+						id="preview-image" src="#" alt="Aperçu de l'image" style="display:none; max-height: 200px; margin-top: 10px;">
+
+						{# Champ fichier à uploader #}
+						{{ form_row(form.imageFile) }}
+					</div>
+				</div>
+
+
+				<div class="col-md-6">
+
+
+					<div class="row mb-3">
+						<div class="col-md-4">
+							{{ form_row(form.date) }}
+						</div>
+						<div class="col-md-4">
+							{{ form_row(form.category) }}
+						</div>
+						<div class="col-md-4">
+							{{ form_row(form.numero_tableau) }}
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-md-3">
+							{{ form_row(form.dimension) }}
+						</div>
+						<div class="col-md-3">
+							{{ form_row(form.points) }}
+						</div>
+						<div class="col-md-3">
+							{{ form_row(form.format) }}
+						</div>
+						<div class="col-md-3">
+							{{ form_row(form.orientation) }}
+						</div>
+					</div>
+
+					{{ form_row(form.description) }}
+					{{ form_row(form.keywords) }}
+					{{ form_row(form.forsale) }}
+					{{ form_row(form.slug) }}
+					{{ form_row(form.ariaLabel) }}
+					{{ form_widget(form.save, { 'attr': {'class': 'btn btn-secondary btn-sm'} }) }}
+
+
+					{{ form_end(form) }}
+					{# Termine le formulaire #}
+
+				</div>
+			</div>
+		</div>
+
+	</section>
+{% endblock %}

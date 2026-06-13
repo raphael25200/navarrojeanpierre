@@ -1,0 +1,13 @@
+framework:
+  validation:
+    auto_mapping:
+      App\Entity\: []
+
+      # ✅ Définition de la taille maximale des fichiers (doit correspondre à php.ini)
+      file:
+      maxSize: 30M
+
+when@test:
+  framework:
+    validation:
+      not_compromised_password: false

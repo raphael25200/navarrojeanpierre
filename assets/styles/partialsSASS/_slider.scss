@@ -1,0 +1,18 @@
+// @use 'variables' as *;
+
+// Variables réutilisables
+$color-bg-light: #fff;
+$box-shadow-light: 0 2px 6px rgba(0, 0, 0, 0.05);
+$z-index-slider: 100;
+$padding-medium: 1rem;
+
+// //////////////////// SLIDER PREVIEW ////////////////////
+.slider_preview {
+  position: sticky;
+  top: 0; // ajustable selon le décalage
+  width: 100%;
+  background: $color-bg-light;
+  z-index: $z-index-slider;
+  padding: $padding-medium;
+  box-shadow: $box-shadow-light;
+}

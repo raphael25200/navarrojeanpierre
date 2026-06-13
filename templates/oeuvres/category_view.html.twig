@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ category.name }}
+	— Jean-Pierre Navarro, peintre
+{% endblock %}
+
+{% block meta_description %}
+	<meta name="description" content="Découvrez les {{ category.name|lower }} de Jean-Pierre Navarro, peintre impressionniste autodidacte.">
+{% endblock %}
+
+{% block body %}
+	<section>
+		<div class="header-container">
+			<h2>{{ category.name }}</h2>
+			<button type="button" class="toggle-filters btn btn-outline-secondary mb-3">
+				Afficher les filtres
+			</button>
+		</div>
+		<div class="filter-oeuvres">
+			{% include 'partials/_filter.html.twig' with { form: form, results_count: results_count,  disable_categories: true } %}
+		</div>
+
+		{% include 'partials/_mosaic.html.twig' with { tableaux: tableaux } %}
+	</section>
+{% endblock %}

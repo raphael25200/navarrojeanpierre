@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Tableau{% endblock %}
+
+{% block body %}
+    <h1>Create new Tableau</h1>
+
+    {{ include('tableau/_form.html.twig') }}
+
+    <a href="{{ path('app_tableau_index') }}">back to list</a>
+{% endblock %}

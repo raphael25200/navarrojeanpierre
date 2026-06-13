@@ -1,0 +1,309 @@
+// @use 'variables' as *;
+
+// Variables réutilisables
+$color-white: white;
+$color-black-opacity: rgba(0, 0, 0, 0.8);
+$border-radius-none: 0px;
+$border-radius-small: 10px;
+$gap-small: 10px;
+$box-shadow-light: 3px 3px 6px rgba(0, 0, 0, 0.2);
+$box-shadow-popup: 4px 4px 5px rgba(0, 0, 0, 1);
+$transition-fast: 0.3s ease-in-out;
+$transition-smooth: 0.5s ease-in-out;
+$scale-hover: 0.95;
+$scale-zoom: 1.05;
+$blur-hover: 3px;
+
+/* //////////////////// GALLERY //////////////////// */
+.gallery {
+  display: flex;
+  gap: $gap-small;
+  width: 100%;
+  justify-content: center;
+
+  .column {
+    display: flex;
+    flex-direction: column;
+    gap: $gap-small;
+    width: 33%; // 3 colonnes par défaut
+  }
+
+  a {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    border-radius: $border-radius-none;
+    width: 100%;
+    box-shadow: $box-shadow-light;
+    transition: box-shadow $transition-fast, transform $transition-fast;
+
+    &.gallery-item {
+      transform: scale(1);
+
+      &:hover {
+        transform: scale($scale-hover);
+        box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+      }
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border-radius: $border-radius-none;
+      transition: transform $transition-fast, filter $transition-fast;
+      display: block;
+    }
+
+    &:hover img {
+      transform: scale($scale-zoom);
+      filter: blur($blur-hover);
+    }
+
+    .image-title {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.5);
+      color: $color-white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      width: 100%;
+      height: 100%;
+      padding: 20px;
+      font-size: 16px;
+      opacity: 0;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+      pointer-events: none;
+    }
+
+    .overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      height: 80%;
+      border: 1px solid $color-white;
+      border-radius: $border-radius-none;
+      background: transparent;
+      opacity: 0;
+      transition: opacity $transition-smooth, transform 0.3s ease;
+    }
+
+    &:hover {
+      .overlay {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.1);
+      }
+      .image-title {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+  }
+}
+
+/* TABLETTE — 2 colonnes */
+/* Tablette — 2 colonnes */
+@media (max-width: 767.98px) {
+  .gallery .column {
+    width: 50%;
+  }
+  .gallery .column:nth-child(3) {
+    display: none;
+  }
+}
+
+/* Mobile — 1 colonne */
+@media (max-width: 575.98px) {
+  .gallery .column {
+    width: 100%;
+  }
+  .gallery .column:nth-child(2),
+  .gallery .column:nth-child(3) {
+    display: none;
+  }
+}
+
+// //////////////////// LIGHTBOX ////////////////////
+//fermeture lightbox
+.my-close {
+  font-weight: 100;
+}
+
+.lightbox {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: $color-black-opacity;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 2000;
+  transition: opacity $transition-smooth, background $transition-smooth;
+  opacity: 0;
+
+  #lightbox-image {
+    max-width: 90%;
+    max-height: 80%;
+    transition: transform $transition-smooth, opacity $transition-smooth;
+    opacity: 1;
+    z-index: 1500;
+    user-select: none;
+    -webkit-user-drag: none;
+
+    &.zoomed {
+      position: absolute;
+      cursor: grab;
+
+      &:active {
+        cursor: grabbing;
+      }
+    }
+  }
+
+  p {
+    color: $color-white;
+    font-size: 18px;
+    margin-top: 10px;
+  }
+
+  .lightbox-nav {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+
+    .prev,
+    .next {
+      position: absolute;
+      top: 50%;
+      width: 20px;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 35px;
+      color: $color-white;
+      cursor: pointer;
+      transition: opacity $transition-fast, transform $transition-fast;
+      border: 0;
+      pointer-events: auto;
+
+      &:hover:not(.disabled) {
+        opacity: 0.7;
+        transform: scale(0.9);
+      }
+    }
+
+    .prev {
+      left: 20px;
+      z-index: 2000;
+    }
+    .next {
+      right: 20px;
+      z-index: 2000;
+    }
+  }
+}
+
+// //////////////////// POP-UP INFO ////////////////////
+#info-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+  min-width: 600px;
+  max-width: 90%;
+  max-height: 80vh;
+  padding: 20px;
+  background: $color-black-opacity;
+  border-radius: $border-radius-small;
+  box-shadow: $box-shadow-popup;
+  z-index: 3000;
+  opacity: 0;
+  transition: opacity $transition-smooth, transform $transition-smooth;
+  display: none;
+
+  &.show {
+    display: block;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  h3 {
+    color: $color-white;
+  }
+
+  #close-popup {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    font-size: 40px;
+    font-weight: bold;
+    color: $color-white;
+    padding: 5px;
+    line-height: 20px;
+    cursor: pointer;
+    text-shadow: none; // supprime l'ombre texte
+    box-shadow: none;
+    z-index: 3010;
+    transition: transform $transition-smooth;
+
+    &:hover {
+      transform: scale(0.8);
+      opacity: 0.7;
+    }
+  }
+
+  #popup-title {
+    margin-bottom: 20px;
+
+    &::first-letter {
+      text-transform: uppercase;
+    }
+  }
+
+  .label {
+    font-weight: bold;
+    color: $color-white;
+  }
+  .value {
+    font-weight: normal;
+    color: $color-white;
+  }
+}
+
+.icon-popup {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $gap-small;
+  z-index: 2000;
+
+  span {
+    font-size: 30px;
+    cursor: pointer;
+    color: $color-white;
+    transition: opacity $transition-fast, transform $transition-fast;
+
+    &:hover {
+      opacity: 0.7;
+      transform: scale(0.9);
+    }
+  }
+}

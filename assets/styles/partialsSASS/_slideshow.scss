@@ -1,0 +1,178 @@
+// @use 'variables' as *;
+
+// Variables réutilisables
+$color-white: #fff;
+$color-white-opacity: rgba(255, 255, 255, 0.25);
+$color-black-opacity: rgba(0, 0, 0, 0.5);
+$font-family-title: "Oswald", sans-serif;
+$transition-fast: 0.3s ease;
+
+// //////////////////// SLIDE PAGE D'ACCUEIL ////////////////////
+.swiper-container {
+  width: 100%;
+  height: 100%;
+}
+
+.slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  text-align: center;
+  font-size: 18px;
+  background: $color-white;
+  overflow: hidden;
+
+  .slide-image {
+    position: absolute;
+    top: -200px;
+    left: -200px;
+    width: calc(100% + 400px);
+    height: calc(100% + 400px);
+    background-position: 50% 50%;
+    background-size: cover;
+  }
+
+  .slide-title {
+    display: block;
+    max-width: 90%;
+    text-align: center;
+    color: #fff;
+    z-index: 100;
+    font-family: $font-family-title;
+    font-size: 3rem;
+    text-transform: uppercase;
+    font-weight: normal;
+    white-space: normal;
+    padding: 0 1rem;
+
+    // Caché tant que Charming n'a pas découpé le texte
+    visibility: hidden;
+
+    &.ready {
+      visibility: visible;
+    }
+
+    @media (min-width: 45em) {
+      font-size: 4vw;
+      max-width: none;
+    }
+
+    span {
+      white-space: pre;
+      display: inline-block;
+      opacity: 0; // Chaque lettre invisible au départ
+    }
+  }
+}
+
+.slideshow {
+  position: relative;
+
+  .slideshow-pagination {
+    position: absolute;
+    bottom: 5rem;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    transition: $transition-fast;
+    z-index: 10;
+
+    .slideshow-pagination-item {
+      display: flex;
+      align-items: center;
+
+      .pagination-number {
+        font-size: 1.8rem;
+        color: $color-white;
+        font-family: $font-family-title;
+        padding: 0 0.5rem;
+        opacity: 0.5;
+      }
+
+      .pagination-separator {
+        display: none;
+        position: relative;
+        width: 40px;
+        height: 2px;
+        background: $color-white-opacity;
+        transition: all $transition-fast;
+
+        @media (min-width: 45em) {
+          display: block;
+        }
+      }
+
+      .pagination-separator-loader {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: $color-white;
+        transform-origin: 0 0;
+      }
+
+      &:hover,
+      &:focus {
+        cursor: pointer;
+      }
+
+      &.active {
+        .pagination-number {
+          opacity: 1;
+        }
+        .pagination-separator {
+          width: 10vw;
+        }
+      }
+
+      &:last-of-type .pagination-separator {
+        width: 0;
+      }
+    }
+  }
+
+  .slideshow-navigation-button {
+    position: absolute;
+    top: 50%; // desktop / tablette : centré
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 5rem;
+    z-index: 1000;
+    transition: all $transition-fast;
+    color: $color-white;
+
+    &:hover,
+    &:focus {
+      cursor: pointer;
+      background: $color-black-opacity;
+    }
+
+    &.prev {
+      left: 0;
+    }
+    &.next {
+      right: 0;
+    }
+
+    // ------------------- Mobile -------------------
+    @media (max-width: 44.99em) {
+      // mobile < 720px
+      top: 80%; // descend les flèches
+      width: 6rem; // plus large sur mobile
+      height: 6rem; // plus grand sur mobile
+
+      &.prev,
+      &.next {
+        font-size: 2rem; // agrandit le chevron sur mobile
+      }
+    }
+  }
+}

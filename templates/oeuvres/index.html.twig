@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Œuvres de Jean-Pierre Navarro — Galerie de peintures
+{% endblock %}
+
+{% block meta_description %}
+	<meta name="description" content="Parcourez les tableaux de Jean-Pierre Navarro : natures mortes, portraits, paysages et abstractions. Plus de 300 œuvres à découvrir.">
+{% endblock %}
+
+{% block body %}
+	<section>
+		<div class="header-container ">
+			<h2>Les oeuvres</h2>
+			<button type="button" class="toggle-filters btn btn-outline-secondary mb-3">
+				Afficher les filtres
+			</button>
+		</div>
+		<div class="filter-oeuvres">
+			{% include 'partials/_filter.html.twig' with { form: form, results_count: results_count,  disable_categories: false } %}
+		</div>
+
+		{% include 'partials/_mosaic.html.twig' with { tableaux: tableaux } %}
+	</section>
+{% endblock %}

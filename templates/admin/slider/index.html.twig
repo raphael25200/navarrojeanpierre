@@ -1,0 +1,285 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Navarro Jean-Pierre / Slider
+{% endblock %}
+
+{% block body %}
+	<div class="header-container"></div>
+	<div class="slider_preview" id="slider_preview">
+		<h1>Personnalisation Slider</h1>
+
+		<!-- ✅ Ligne compteur + bouton -->
+		<div class="d-flex justify-content-between align-items-center mb-3">
+			<p id="slider-counter" class="fw mb-0">
+				{{ tableaux|filter(t => t.isInSlider)|length }}
+				/ 5 images dans le slider
+			</p>
+			<button id="save-slider-btn" class="btn btn-secondary btn-sm" data-save-url="{{ path('admin.slider.save') }}">
+				Enregistrer le slider
+			</button>
+		</div>
+
+		<!-- ✅ Conteneur du preview -->
+		<div id="slider-items-container" class="d-flex flex-wrap justify-content-start gap-3">
+			{% for tableau in tableaux %}
+				{% if tableau.isInSlider %}
+					<div class="slider-item d-flex flex-column text-center" data-id="{{ tableau.id }}">
+						<div class="image-wrapper">
+							<img
+							src="{{ asset('images/preview/' ~ tableau.preview) }}" alt="Preview" class="img-fluid">
+
+							<!-- ✅ Toggle par-dessus l’image -->
+							<label class="toggle-switch overlay-toggle">
+								<input type="checkbox" class="toggle-input-preview" data-id="{{ tableau.id }}" checked>
+								<span class="toggle-slider"></span>
+							</label>
+						</div>
+
+						<input type="text" class="custom-title-input mt-2" data-id="{{ tableau.id }}" value="{{ tableau.customTitle is not empty ? tableau.customTitle : tableau.title }}" placeholder="Titre personnalisé">
+					</div>
+
+				{% endif %}
+			{% endfor %}
+		</div>
+	</div>
+
+	<section>
+		<table class="table">
+			{% for tableau in tableaux %}
+				<tr>
+					<td class="preview-container">
+						<img src="{{ asset('images/thumbnail/' ~ tableau.thumbnail) }}" alt="Thumbnail" class="miniature">
+						<div class="preview">
+							<img src="{{ asset('images/preview/' ~ tableau.preview) }}" alt="Aperçu">
+						</div>
+					</td>
+					<td>
+						<a href="{{ path('admin.tableau.edit', {id: tableau.id}) }}">{{ tableau.title }}</a>
+					</td>
+					<td>{{ tableau.category.name | default('') }}
+					</td>
+					<td>
+						<div class="d-flex gap-1">
+							<a class="btn btn-light btn-sm" href="{{ path('admin.tableau.edit', {id: tableau.id}) }}">Éditer</a>
+							<form action="{{ path('admin.tableau.delete', {id: tableau.id}) }}" method="post"></form>
+						</div>
+					</td>
+					<td>
+						<label class="toggle-switch ">
+							<input type="checkbox" class="toggle-input" data-id="{{ tableau.id }}" data-preview="{{ asset('images/preview/' ~ tableau.preview) }}" {% if tableau.isInSlider %} checked {% endif %}>
+							<span class="toggle-slider"></span>
+						</label>
+					</td>
+				</tr>
+			{% endfor %}
+		</table>
+	</section>
+
+	<style>
+		/* ✅ Limite la hauteur des images */
+		.slider-item img {
+			max-height: 100px;
+			width: auto;
+			border-radius: 5px;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+		}
+
+		/* ✅ Style du switch */
+		.toggle-switch {
+			position: relative;
+			display: inline-block;
+			width: 60px;
+			height: 28px;
+			margin-top: 5px;
+		}
+
+		.toggle-input {
+			opacity: 0;
+			width: 0;
+			height: 0;
+		}
+
+		.toggle-slider {
+			position: absolute;
+			cursor: pointer;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: #ccc;
+			transition: 0.4s;
+			border-radius: 34px;
+		}
+
+		.toggle-slider:before {
+			position: absolute;
+			content: "OFF";
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: white;
+			font-size: 12px;
+			font-weight: bold;
+			left: 30px;
+			top: 50%;
+			transform: translateY(-50%);
+		}
+
+		/* Le rond */
+		.toggle-slider:after {
+			position: absolute;
+			content: "";
+			height: 22px;
+			width: 22px;
+			left: 3px;
+			bottom: 3px;
+			background-color: white;
+			transition: 0.4s;
+			border-radius: 50%;
+		}
+
+		.toggle-input,
+		.toggle-input-preview {
+			opacity: 0;
+			width: 0;
+			height: 0;
+		}
+
+		/* état ON (appliqué aux deux classes) */
+		.toggle-input:checked + .toggle-slider,
+		.toggle-input-preview:checked + .toggle-slider {
+			background-color: rgba(68, 108, 169, 0.5);
+		}
+
+		.toggle-input:checked + .toggle-slider:before,
+		.toggle-input-preview:checked + .toggle-slider:before {
+			content: "ON";
+			left: auto;
+			right: 30px;
+		}
+
+		.toggle-input:checked + .toggle-slider:after,
+		.toggle-input-preview:checked + .toggle-slider:after {
+			transform: translateX(30px);
+		}
+
+
+		/* === Édition des titres (admin slider preview) === */
+		.slider-item {
+			max-width: 220px; /* pour éviter que l’input déborde */
+			margin: 0 auto;
+		}
+
+		.slider-item .title-edit {
+			margin-top: 8px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			gap: 6px;
+		}
+
+		.slider-item .title-input {
+			width: 100%;
+			max-width: 160px;
+			padding: 6px 8px;
+			font-size: 14px;
+			border: 1px solid #ced4da;
+			border-radius: 4px;
+		}
+
+		.slider-item .save-title-btn {
+			padding: 6px 10px;
+			font-size: 14px;
+			border: none;
+			background-color: #446CA9; /* cohérent avec ton toggle */
+			color: #fff;
+			border-radius: 4px;
+			cursor: pointer;
+		}
+
+		.slider-item .save-title-btn:hover {
+			opacity: 0.9;
+		}
+
+		/* Images du slider : format carré */
+		.slider-item img {
+			width: 100%;
+			aspect-ratio: 1 / 1; /* carré parfait */
+			object-fit: cover; /* tronque pour remplir */
+			border-radius: 5px;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+		}
+
+		/* Champ de titre personnalisé */
+		.custom-title-input {
+			width: 90%;
+			margin: 8px auto 5px;
+			padding: 6px 10px;
+			background-color: #f1f1f1; /* gris clair */
+			border: none; /* pas de contour */
+			border-radius: 4px;
+			font-size: 14px;
+			text-align: center;
+			box-sizing: border-box;
+		}
+
+		.custom-title-input:focus {
+			outline: none; /* supprime le contour au focus */
+			background-color: #e2e2e2; /* un peu plus foncé quand on écrit */
+		}
+
+		/* Pour pouvoir placer le toggle au-dessus de l’image */
+		.image-wrapper {
+			position: relative;
+			display: inline-block;
+		}
+
+		/* Toggle en bas à droite sur l’image */
+		.overlay-toggle {
+			position: absolute;
+			bottom: 5px;
+			right: 5px;
+			margin: 0; /* on neutralise le margin-top existant */
+		}
+
+		.preview-container {
+			position: relative;
+			width: 50px; /* taille de la miniature */
+		}
+
+		.miniature {
+			width: 100%;
+			display: block;
+			cursor: pointer;
+		}
+
+		.preview {
+			display: none;
+			position: fixed; /* reste à la même position même en scrollant */
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%); /* centre exact */
+			width: 500px; /* taille du preview, à ajuster */
+			max-width: 90%; /* responsive */
+			z-index: 10000;
+			border: 1px solid #ccc;
+			border-radius: 8px;
+			background: #fff;
+			padding: 10px;
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+		}
+
+		.preview img {
+			width: 100%;
+			height: auto;
+		}
+
+		.preview-container:hover .preview {
+			display: block;
+		}
+	</style>
+
+	<script></script>
+
+
+{% endblock %}

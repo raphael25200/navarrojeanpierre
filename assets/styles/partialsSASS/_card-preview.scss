@@ -1,0 +1,32 @@
+// @use "variables" as *;
+
+// Variables réutilisables
+$border-color-light: #ddd;
+$border-color-medium: #ccc;
+$border-color-hover: #999;
+$bg-hover: #f8f9fa;
+$border-radius-small: 0.5rem;
+$border-radius-top-none: 0 0 0 0;
+
+// Cards
+.card-img-top {
+  border-bottom: 1px solid $border-color-light;
+  border-radius: $border-radius-top-none;
+}
+
+.card {
+  border-radius: $border-radius-small;
+  border: 0 solid $border-color-light;
+}
+
+// Bordures en pointillé
+.border-dashed {
+  border: 2px dashed $border-color-medium;
+  border-radius: $border-radius-small;
+  transition: background-color 0.2s ease-in-out, border-color 0.2s;
+
+  &:hover {
+    background-color: $bg-hover;
+    border-color: $border-color-hover;
+  }
+}

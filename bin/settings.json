@@ -1,0 +1,20 @@
+{
+  // "extensions.allowed": "*",
+  "window.zoomLevel": 1,
+  "emmet.preferences": {},
+  "php.validate.executablePath": "C:/xampp/php/php.exe",
+  "editor.renderWhitespace": "trailing",
+  "editor.linkedEditing": true,
+  "editor.occurrencesHighlight": "off",
+  "editor.suggest.insertMode": "replace",
+  "editor.acceptSuggestionOnCommitCharacter": false,
+  "files.autoSave": "onFocusChange",
+  "workbench.tree.indent": 20,
+  "workbench.tree.renderIndentGuides": "always",
+  "workbench.editor.enablePreview": false,
+  "emmet.triggerExpansionOnTab": true,
+  "editor.fontLigatures": true,
+  "editor.lineHeight": 20,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true
+}

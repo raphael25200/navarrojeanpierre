@@ -1,0 +1,38 @@
+<div class="comment-widget">
+	<div
+		class="comment-widget-wrapper">
+		<!-- Header avec fermeture -->
+		<div class="comment-header">
+			Commentaires
+			<span class="close-btn"></span>
+		</div>
+
+		<!-- Contenu des commentaires -->
+		<div class="comment-content">
+			<div class="comment-list" id="comments_list_lightbox">
+				{% for avis in avisList %}
+					<div class="comment-item">
+						<strong>{{ avis.pseudo ?: 'Anonyme' }}
+							:</strong>
+
+						{{ avis.content }}
+						<span class="comment-email">{{ avis.email ?: '' }}</span>
+					</div>
+				{% else %}
+					<div class="comment-item">Aucun commentaire pour le moment.</div>
+				{% endfor %}
+			</div>
+
+			<!-- Formulaire -->
+			<form id="comment_form" action="{{ path('tableau_avis_partial', {'id': tableau.id}) }}" method="post">>
+				{{ form_widget(commentForm) }}
+				<button type="submit">Envoyer</button>
+			</form>
+
+			<!-- Message de succès -->
+			<div id="comment_success"></div>
+		</div>
+
+
+	</div>
+</div>

@@ -1,0 +1,38 @@
+{% if is_granted('ROLE_ADMIN') %}
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<div class="container">
+			<a class="navbar-brand text-white" href="{{ path('home') }}">Administration</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbarNavDropdown" aria-controls="adminNavbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="adminNavbarNavDropdown">
+				<ul
+					class="navbar-nav ms-auto">
+					{# ms-auto pour aligner à droite #}
+
+					<li class="nav-item">
+						<a class="nav-link {{ app.request.attributes.get('_route') starts with 'admin.tableau' ? 'active' : '' }}" href="{{ path('admin.tableau.index') }}">Tableaux</a>
+					</li>
+
+					<li class="nav-item">
+						<a class="nav-link {{ app.request.attributes.get('_route') starts with 'admin.category' ? 'active' : '' }}" href="{{ path('admin.category.index') }}">Catégories</a>
+					</li>
+
+					<li class="nav-item">
+						<a class="nav-link {{ app.request.attributes.get('_route') starts with 'admin.slider' ? 'active' : '' }}" href="{{ path('admin.slider.index') }}">Slider</a>
+					</li>
+
+					<li class="nav-item">
+						<a class="nav-link {{ app.request.attributes.get('_route') starts with 'admin.comments' ? 'active' : '' }}" href="{{ path('admin.comments.index') }}">Commentaires</a>
+					</li>
+
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
+					</li>
+
+				</ul>
+			</div>
+		</div>
+	</nav>
+{% endif %}

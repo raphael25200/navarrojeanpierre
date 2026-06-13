@@ -1,0 +1,29 @@
+// // @use 'variables' as *;
+
+// // Variables
+// $gap-medium: 1.5rem;
+// $filter-width: 250px;
+// $filter-margin-right: 20px;
+
+// // //////////////////// BOX OEUVRES ////////////////////
+// .box-oeuvres {
+//   display: flex;
+//   flex-direction: column; // Mobile first : colonne
+//   gap: $gap-medium;
+
+//   @media (min-width: 768px) {
+//     flex-direction: column; // conserve la colonne mais ajuste l'alignement
+//     align-items: flex-start;
+
+//     .filter-oeuvres {
+//       width: $filter-width;
+//       flex-shrink: 0;
+//       margin-right: $filter-margin-right;
+//       align-self: flex-start;
+//     }
+
+//     .oeuvres-mosaic {
+//       flex: 1;
+//     }
+//   }
+// }

@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau{% endblock %}
+
+{% block body %}
+    <h1>Tableau</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ tableau.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ tableau.title }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ tableau.description }}</td>
+            </tr>
+            <tr>
+                <th>Keywords</th>
+                <td>{{ tableau.keywords }}</td>
+            </tr>
+            <tr>
+                <th>Dimension</th>
+                <td>{{ tableau.dimension }}</td>
+            </tr>
+            <tr>
+                <th>Forsale</th>
+                <td>{{ tableau.forsale ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Image</th>
+                <td>{{ tableau.image }}</td>
+            </tr>
+            <tr>
+                <th>Thumbnail</th>
+                <td>{{ tableau.thumbnail }}</td>
+            </tr>
+            <tr>
+                <th>Preview</th>
+                <td>{{ tableau.preview }}</td>
+            </tr>
+            <tr>
+                <th>Slug</th>
+                <td>{{ tableau.slug }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ tableau.createdAt ? tableau.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ tableau.updatedAt ? tableau.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ tableau.date ? tableau.date|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Is_in_slider</th>
+                <td>{{ tableau.isInSlider ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Orientation</th>
+                <td>{{ tableau.orientation }}</td>
+            </tr>
+            <tr>
+                <th>Numero_tableau</th>
+                <td>{{ tableau.numeroTableau }}</td>
+            </tr>
+            <tr>
+                <th>Commentaires</th>
+                <td>{{ tableau.commentaires }}</td>
+            </tr>
+            <tr>
+                <th>CustomTitle</th>
+                <td>{{ tableau.customTitle }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_tableau_index') }}">back to list</a>
+
+    <a href="{{ path('app_tableau_edit', {'id': tableau.id}) }}">edit</a>
+
+    {{ include('tableau/_delete_form.html.twig') }}
+{% endblock %}

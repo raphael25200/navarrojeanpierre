@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% set page_title = tableau.title ~ ' — ' ~ (tableau.category ? tableau.category.name : 'Œuvre') ~ ' | Jean-Pierre Navarro' %}
+
+{% block title %}
+	{{ page_title }}
+{% endblock %}
+
+{% block meta_description %}
+	<meta name="description" content="{{ tableau.description|default('Tableau de Jean-Pierre Navarro, peintre impressionniste autodidacte.')|striptags|slice(0, 155) }}">
+{% endblock %}
+
+{% block canonical %}
+	<link rel="canonical" href="{{ url('oeuvre.show', {slug: tableau.slug}) }}">
+{% endblock %}
+
+{% block structured_data %}
+	<script type="application/ld+json">
+		{
+					"@context": "https://schema.org",
+					"@type": "VisualArtwork",
+					"name":
+		{{ tableau.title|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }},
+					"artist": {
+						"@type": "Person",
+						"name": "Jean-Pierre Navarro"
+					},
+					"artform": "Peinture",
+		{% if tableau.category %}
+			"artworkSurface":
+			{{ tableau.category.name|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }},
+		{% endif %}
+		{% if tableau.date %}
+			"dateCreated": "{{ tableau.date|date('Y') }}",
+		{% endif %}
+		{% if tableau.description %}
+			"description":
+			{{ tableau.description|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }},
+		{% endif %}
+		"image": "{{ absolute_url(asset('images/images_sources/' ~ tableau.image)) }}",
+		{% if tableau.forsale %}
+			"offers": {
+							"@type": "Offer",
+							"availability": "https://schema.org/InStock"
+						},
+		{% endif %}
+		"url": "{{ url('oeuvre.show', {slug: tableau.slug}) }}"
+				}
+	</script>
+{% endblock %}
+
+{% block body %}
+	<article class="oeuvre-detail my-5">
+		<div class="row">
+			<div class="col-lg-8">
+				<img src="{{ asset('images/images_sources/' ~ tableau.image) }}" alt="{{ tableau.ariaLabel|default(tableau.title) }}" class="img-fluid w-100" loading="eager">
+			</div>
+			<div class="col-lg-4">
+				<h1>{{ tableau.title }}</h1>
+
+				{% if tableau.category %}
+					<p class="text-muted">
+						<a href="{{ path('oeuvres.category_view', {slug: tableau.category.slug}) }}">
+							{{ tableau.category.name }}
+						</a>
+					</p>
+				{% endif %}
+
+				{% if tableau.date %}
+					<p>
+						<strong>Année :</strong>
+						{{ tableau.date|date('Y') }}</p>
+				{% endif %}
+
+				{% if tableau.dimension %}
+					<p>
+						<strong>Dimensions :</strong>
+						{{ tableau.dimension }}</p>
+				{% endif %}
+
+				{% if tableau.commentaires %}
+					<div class="mt-3">
+						<h2 class="h5">Notes de l'artiste</h2>
+						<p>{{ tableau.commentaires }}</p>
+					</div>
+				{% endif %}
+
+				{% if tableau.description %}
+					<div class="mt-3">
+						<h2 class="h5">Description</h2>
+						<p>{{ tableau.description }}</p>
+					</div>
+				{% endif %}
+
+				{% if tableau.forsale %}
+					<div class="mt-4">
+						<a href="{{ path('contact') }}" class="btn btn-outline-dark">
+							Acquérir cette œuvre
+						</a>
+					</div>
+				{% endif %}
+
+				<div class="mt-4">
+					<a href="{{ path('oeuvres.search') }}">← Retour aux œuvres</a>
+				</div>
+			</div>
+		</div>
+	</article>
+{% endblock %}

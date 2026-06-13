@@ -1,0 +1,22 @@
+# Environnement et secrets
+.env
+.env.local
+.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+
+# Symfony / cache / logs
+/var/
+/vendor/
+
+# Node / build
+/node_modules/
+npm-debug.log
+yarn-error.log
+
+# PHPUnit
+/phpunit.xml
+.phpunit.result.cache
+
+# Assets images (données lourdes + droits)
+public/images/
+images/

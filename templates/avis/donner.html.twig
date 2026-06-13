@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Votre avis{% endblock %}
+
+{% block body %}
+    {% if is_granted('ROLE_AVIS') %}
+    {% include 'partials/_avis.html.twig' %}{% endblock %}
+{% endif %}

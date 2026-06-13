@@ -1,0 +1,151 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Tableau :
+	{{ tableau.title }}
+{% endblock %}
+
+{% block body %}
+	<section>
+		<div class="header-container">
+			{{ form_start(form) }}
+			{# Démarre le formulaire #}
+			<div
+				class="row">
+				<!-- Colonne pour l'image -->
+				<div class="col-md-6">
+					<div class="col-md-12">
+						<div
+							class="input-container">
+							{# <span class="label-icon">Titre </span> #}
+							{{ form_row(form.title) }}
+						</div>
+					</div>
+					<div>
+						<a href="{{ asset('images/images_sources/' ~ tableau.image) }}" class="gallery-item">
+							<img src="{{ asset('images/preview/' ~ tableau.preview) }}" alt="Thumbnail" class="img-fluid ">
+						</a>
+					</div>
+
+					{{ form_row(form.image) }}
+
+					{{ form_row(form.imageFile) }}
+
+				</div>
+
+
+				<div class="col-md-6">
+
+
+					<div class="row mb-3">
+						<div class="col-md-4">
+							{{ form_row(form.date) }}
+						</div>
+						<div class="col-md-4">
+							{{ form_row(form.category) }}
+						</div>
+						<div class="col-md-4">
+							{{ form_row(form.numero_tableau) }}
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-md-3">
+							{{ form_row(form.dimension) }}
+						</div>
+						<div class="col-md-3">
+							{{ form_row(form.points) }}
+						</div>
+						<div class="col-md-3">
+							{{ form_row(form.format) }}
+						</div>
+						<div class="col-md-3">
+							{{ form_row(form.orientation) }}
+						</div>
+					</div>
+
+					{{ form_row(form.commentaires) }}
+					<div class="row mb-3">
+						<div class="col-md-12">
+							{{ form_row(form.description) }}
+							{{ form_row(form.keywords) }}
+							{{ form_row(form.ariaLabel) }}
+							<button type="button" class="btn btn-secondary btn-sm" id="btn-generate-ia" data-id="{{ tableau.id }}">
+								Générer description, mots-clés et aria-label via IA
+							</button>
+						</div>
+					</div>
+
+					{{ form_row(form.forsale) }}
+					{{ form_row(form.slug) }}
+					{{ form_widget(form.save, { 'attr': {'class': 'btn btn-secondary btn-sm'} }) }}
+					{{ form_end(form) }}
+					{# Termine le formulaire #}
+
+				</div>
+			</div>
+		</div>
+
+	</section>
+	<!-- ✅ Conteneur de la Lightbox (initialement caché) -->
+	<div id="lightbox" class="lightbox">
+		<span class="close">&times;</span>
+		<!-- Bouton de fermeture -->
+		<span class="zoom-icon">+</span>
+		<!-- Icône de zoom -->
+		<span class="fullscreen-icon">⛶</span>
+		<!-- Plein écran -->
+
+		<img id="lightbox-image" src="" alt="">
+
+		<p id="lightbox-title"></p>
+		<div class="lightbox-nav">
+			<span class="prev">&#10094;</span>
+			<span class="next">&#10095;</span>
+		</div>
+	</div>
+
+	<script>
+		function generateAI(tableauId, button) {
+const url = `/admin/tableaux/${tableauId}/generate-ai`;
+
+button.disabled = true;
+const originalText = button.textContent;
+button.textContent = 'Génération en cours...';
+
+fetch(url, {
+method: 'POST',
+headers: {
+'X-Requested-With': 'XMLHttpRequest'
+}
+}).then(async response => {
+console.log('HTTP status:', response.status); // <-- log du status HTTP
+const data = await response.json(); // lecture de la réponse JSON
+console.log('Réponse IA brute :', data); // <-- log de la réponse
+return data; // renvoyer les données pour le prochain then
+}).then(data => { // Remplissage des champs du formulaire si présents
+if (data.description !== undefined) {
+document.getElementById('tableau_description').value = data.description;
+}
+if (data.keywords !== undefined) {
+document.getElementById('tableau_keywords').value = Array.isArray(data.keywords) ? data.keywords.join(', ') : data.keywords;
+}
+if (data.aria_label !== undefined) {
+document.getElementById('tableau_ariaLabel').value = data.aria_label;
+}
+}).catch(error => {
+console.error('Erreur IA:', error);
+alert('Impossible de générer le contenu pour le moment. Veuillez réessayer.');
+}). finally(() => {
+button.disabled = false;
+button.textContent = originalText;
+});
+}
+
+// Ajout de l'écouteur sur le bouton
+document.getElementById('btn-generate-ia').addEventListener('click', function () {
+generateAI(this.dataset.id, this);
+});
+	</script>
+
+
+{% endblock %}

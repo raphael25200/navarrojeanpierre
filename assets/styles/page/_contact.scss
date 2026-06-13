@@ -1,0 +1,27 @@
+// @use 'variables' as *;
+
+// Variables réutilisables
+$gap-medium: 1rem;
+$margin-large: 1.5rem;
+$font-size-h1: 1.8rem;
+
+// //////////////////// CONTACT ////////////////////
+.contact-box {
+  h1 {
+    margin-bottom: $margin-large;
+    font-size: $font-size-h1;
+    text-align: center;
+    font-weight: normal;
+  }
+}
+
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: $gap-medium;
+}
+
+.submit-btn {
+  margin-top: $margin-large;
+  text-align: center;
+}

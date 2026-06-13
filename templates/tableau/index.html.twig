@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau index{% endblock %}
+
+{% block body %}
+    <h1>Tableau index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Keywords</th>
+                <th>Dimension</th>
+                <th>Forsale</th>
+                <th>Image</th>
+                <th>Thumbnail</th>
+                <th>Preview</th>
+                <th>Slug</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>Date</th>
+                <th>Is_in_slider</th>
+                <th>Orientation</th>
+                <th>Numero_tableau</th>
+                <th>Commentaires</th>
+                <th>CustomTitle</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for tableau in tableaus %}
+            <tr>
+                <td>{{ tableau.id }}</td>
+                <td>{{ tableau.title }}</td>
+                <td>{{ tableau.description }}</td>
+                <td>{{ tableau.keywords }}</td>
+                <td>{{ tableau.dimension }}</td>
+                <td>{{ tableau.forsale ? 'Yes' : 'No' }}</td>
+                <td>{{ tableau.image }}</td>
+                <td>{{ tableau.thumbnail }}</td>
+                <td>{{ tableau.preview }}</td>
+                <td>{{ tableau.slug }}</td>
+                <td>{{ tableau.createdAt ? tableau.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ tableau.updatedAt ? tableau.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ tableau.date ? tableau.date|date('Y-m-d') : '' }}</td>
+                <td>{{ tableau.isInSlider ? 'Yes' : 'No' }}</td>
+                <td>{{ tableau.orientation }}</td>
+                <td>{{ tableau.numeroTableau }}</td>
+                <td>{{ tableau.commentaires }}</td>
+                <td>{{ tableau.customTitle }}</td>
+                <td>
+                    <a href="{{ path('app_tableau_show', {'id': tableau.id}) }}">show</a>
+                    <a href="{{ path('app_tableau_edit', {'id': tableau.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="19">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_tableau_new') }}">Create new</a>
+{% endblock %}

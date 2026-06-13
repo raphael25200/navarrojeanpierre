@@ -1,0 +1,102 @@
+// Variables
+$font-family-base: "Urbanist", sans-serif;
+$font-size-base: 16px;
+$color-background: rgb(255, 255, 255);
+$color-text-light: rgb(58, 58, 58);
+$admin-navbar-height: 56px;
+
+// Styles globaux
+html {
+  overflow-y: scroll; // Toujours afficher la scrollbar verticale
+}
+
+body {
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  background-color: $color-background !important;
+  margin: 0;
+}
+
+.container {
+  width: 1200px;
+}
+
+// Décalage navbar si barre admin présente
+.admin-navbar-wrapper + .navbar {
+  margin-top: $admin-navbar-height;
+}
+
+// Header
+.header-container {
+  display: flex;
+  flex-direction: column; // empile titre et bouton
+  align-items: center; // centre tout horizontalement
+  margin-bottom: 2rem;
+  padding-top: 9rem;
+  gap: 0.5rem; // espace entre titre et bouton
+
+  h1 {
+    margin: 0;
+    text-align: center;
+    font-weight: 200 !important;
+    color: $color-text-light !important;
+  }
+
+  /* H1 — très petits écrans <576px */
+  @media (max-width: 575.98px) {
+    h1 {
+      font-size: 6rem; /* plus gros que 4rem */
+    }
+  }
+
+  button {
+    margin-top: 3rem; // petit espace supplémentaire si besoin
+  }
+}
+
+// Sections
+.section_home,
+.section_home2 {
+  width: 100%;
+  height: 100vh;
+  margin-top: 0;
+}
+
+section {
+  width: 100%;
+  height: 100%;
+}
+
+.flash-global {
+  position: fixed; /* fixe le popup par rapport à l’écran */
+  top: 50%; /* centre verticalement */
+  left: 50%; /* centre horizontalement */
+  transform: translate(-50%, -50%) scale(0); /* scale(0) au départ pour l'animation */
+  z-index: 1000; /* au-dessus des autres éléments */
+  width: 90%; /* largeur max du popup */
+  max-width: 500px;
+  text-align: center; /* centre le texte */
+  animation: popupBounce 0.5s forwards; /* applique l'animation */
+}
+
+/* Animation pop-up avec effet bounce */
+@keyframes popupBounce {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  60% {
+    transform: translate(-50%, -50%) scale(1.05);
+    opacity: 1;
+  }
+  80% {
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.grecaptcha-badge {
+  bottom: 80px !important;
+}
