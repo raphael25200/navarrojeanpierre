@@ -345,4 +345,57 @@ final class AdminController extends AbstractController
         $this->addFlash('success', 'Le commentaire a été supprimé.');
         return $this->redirectToRoute('admin.comments.index');
     }
+    #[Route('/tableaux/batch-ai', name: '.tableau.batch_ai', methods: ['GET'])]
+    public function batchAiForm(): Response
+    {
+        return $this->render('admin/tableau/batch.html.twig');
+    }
+
+    #[Route('/tableaux/save-ai/{numero}', name: '.tableau.save_ai', methods: ['POST'])]
+    public function saveAI(int $numero, TableauRepository $repository, ImageAnalyzerService $analyzer, EntityManagerInterface $em): JsonResponse
+    {
+        $tableau = $repository->findOneBy(['numero_tableau' => $numero]);
+
+        if (!$tableau) {
+            return new JsonResponse(['error' => true, 'message' => 'Œuvre non trouvée.'], 404);
+        }
+
+        $imageName = $tableau->getImage();
+        if (!$imageName) {
+            return new JsonResponse(['error' => true, 'message' => 'Pas d\'image.']);
+        }
+
+        $imageUrl = 'https://www.navarrojeanpierre.com/images/images_sources/' . $imageName;
+
+        try {
+            $result = $analyzer->analyzeImage($imageUrl, $tableau->getTitle());
+
+            if (!empty($result['error'])) {
+                return new JsonResponse(['error' => true, 'message' => $result['error']]);
+            }
+
+            if (!empty($result['description'])) {
+                $tableau->setDescription($result['description']);
+            }
+            if (!empty($result['keywords'])) {
+                $tableau->setKeywords(implode(', ', $result['keywords']));
+            }
+            if (!empty($result['aria_label'])) {
+                $tableau->setAriaLabel($result['aria_label']);
+            }
+
+            $em->flush();
+
+            return new JsonResponse([
+                'success' => true,
+                'numero' => $numero,
+                'title' => $tableau->getTitle(),
+                'description' => $result['description'],
+                'keywords' => $result['keywords'],
+                'aria_label' => $result['aria_label'],
+            ]);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => true, 'message' => $e->getMessage()]);
+        }
+    }
 }
