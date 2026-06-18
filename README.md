@@ -6,9 +6,9 @@
 
 ## Description
 
-Application web développée avec Symfony permettant de présenter les œuvres d’un peintre.
+Application web développée avec Symfony permettant de présenter les œuvres de Jean-Pierre Navarro, peintre impressionniste autodidacte.
 
-Le projet comprend une interface publique ainsi qu’un espace d’administration permettant de gérer les contenus (tableaux, catégories, commentaires, slider).
+Le site expose plus de 300 tableaux organisés par catégories, avec des pages individuelles optimisées pour le référencement. Il comprend une interface publique ainsi qu'un espace d'administration permettant de gérer les contenus.
 
 ---
 
@@ -20,28 +20,64 @@ https://navarrojeanpierre.com
 
 ## Fonctionnalités
 
-- Affichage des œuvres  
-- Navigation par catégories  
-- Page d’accueil avec slider  
-- Formulaire de contact  
+- Galerie d'œuvres avec mosaïque et lightbox
+- Navigation par catégories (nature morte, portrait, paysage, abstraction)
+- Page individuelle par œuvre avec données structurées Schema.org
+- Slider dynamique en page d'accueil
+- Formulaire de contact avec reCAPTCHA v3
+- Page biographie de l'artiste
+- Système de commentaires avec modération
 
 ### Back-office
 
-- Gestion des tableaux (CRUD)  
-- Gestion des catégories  
-- Modération des commentaires  
-- Gestion du slider  
-- Génération de contenu via IA  
+- Gestion des tableaux (CRUD)
+- Gestion des catégories
+- Modération des commentaires
+- Gestion du slider
+- Génération de contenu via IA (description, mots-clés, aria-label)
+- Traitement IA par lot avec interface dédiée
+
+### SEO
+
+- Sitemap XML dynamique
+- Balises title et meta description optimisées
+- Données structurées Schema.org (VisualArtwork)
+- URLs propres avec slugs
+- Maillage interne automatique
+
+---
+
+## Captures d'écran
+
+<p align="center">
+  <img src="public/screenshots/galerie.png" alt="Galerie des œuvres" width="700">
+</p>
+
+<p align="center">
+  <img src="public/screenshots/oeuvre.png" alt="Page œuvre" width="700">
+</p>
+
+---
+
+## Stack technique
+
+- **Back-end** : PHP 8.x, Symfony 6.x
+- **Front-end** : Twig, SCSS, Bootstrap 5.3, Webpack Encore
+- **Base de données** : MySQL 8
+- **Upload d'images** : VichUploaderBundle
+- **IA** : API OpenAI (GPT-4o-mini)
+- **Hébergement** : OVH mutualisé
+- **Déploiement** : FTP (FileZilla)
 
 ---
 
 ## Prérequis
 
-- PHP >= 8.x  
-- Composer  
-- Node.js / npm  
-- MySQL  
-- Symfony CLI (optionnel)  
+- PHP >= 8.x
+- Composer
+- Node.js / npm
+- MySQL
+- Symfony CLI (optionnel)
 
 ---
 
@@ -50,7 +86,7 @@ https://navarrojeanpierre.com
 ### 1. Cloner le projet
 
 ```bash
-git clone https://github.com/raphael25200/navarrojeanpierre
+git clone https://github.com/raphael25200/navarrojeanpierre.git
 cd navarrojeanpierre
 ```
 
@@ -85,7 +121,12 @@ MAILER_DSN=null://null
 # API OpenAI
 OPENAI_API_KEY=your_api_key
 OPENAI_ORGANIZATION=
+
+# reCAPTCHA v3
+RECAPTCHA3_KEY=your_key
+RECAPTCHA3_SECRET=your_secret
 ```
+
 Adapter les valeurs selon votre environnement.
 
 ---
@@ -109,39 +150,42 @@ Lancer le serveur de développement :
 symfony serve
 ```
 
-Accéder à l’application :  
+Accéder à l'application :
 http://localhost:8000
 
 ---
 
 ## Gestion des contenus
 
-Les œuvres et leurs images sont gérées via l’interface d’administration.
+Les œuvres et leurs images sont gérées via l'interface d'administration.
 
-Les fichiers images sont importés lors de la création ou de la modification d’un tableau depuis le back-office.
+Les fichiers images sont importés lors de la création ou de la modification d'un tableau depuis le back-office.
+
+---
+
+## Intégration IA
+
+Le site intègre l'API OpenAI (GPT-4o-mini) pour analyser les peintures et générer automatiquement :
+
+- une description factuelle optimisée pour le SEO
+- une liste de 10 à 15 mots-clés classés par pertinence
+- un aria-label pour l'accessibilité
+
+Le prompt est conçu pour décrire ce qui est visible sans utiliser de vocabulaire de critique d'art. Un traitement par lot est disponible depuis l'interface d'administration.
 
 ---
 
 ## Structure du projet
 
-- `src/` : logique applicative (controllers, services, entités)  
-- `templates/` : vues Twig  
-- `assets/` : fichiers JavaScript et CSS  
-- `public/` : point d’entrée et fichiers publics  
-- `migrations/` : structure de la base de données  
-
----
-
-## Améliorations possibles
-
-- Refactorisation des controllers  
-- Amélioration de l’architecture (services)  
-- Ajout de tests automatisés  
-- Optimisation des performances  
+- `src/` : logique applicative (controllers, services, entités)
+- `templates/` : vues Twig
+- `assets/` : fichiers JavaScript et CSS
+- `public/` : point d'entrée et fichiers publics
+- `migrations/` : structure de la base de données
 
 ---
 
 ## Auteur
 
-Raphaël Navarro  
+Raphaël Navarro
 Développeur web Symfony
