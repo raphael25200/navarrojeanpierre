@@ -18,7 +18,7 @@
 			<div class="column"></div>
 
 			{% for tableau in tableaux %}
-				<a href="{{ asset('images/images_sources/' ~ tableau.image) }}" data-id="{{ tableau.id }}" class="gallery-item" data-title="{{ tableau.title }}" data-category="{{ tableau.category }}" data-date="{{ tableau.date|date('d/m/Y') }}" data-commentaires="{{ tableau.commentaires }}" data-description="{{ tableau.description }}" data-keywords="{{ tableau.keywords }}" data-dimension="{{ tableau.dimension }}" data-forsale="{{ tableau.forsale ? 'Oui':'Non' }}" data-aria-label="{{ tableau.ariaLabel }}">
+				<a href="{{ asset('images/' ~ (tableau.display ? 'display/' ~ tableau.display : 'images_sources/' ~ tableau.image)) }}" data-id="{{ tableau.id }}" class="gallery-item" data-title="{{ tableau.title }}" data-category="{{ tableau.category }}" data-date="{{ tableau.date|date('d/m/Y') }}" data-commentaires="{{ tableau.commentaires }}" data-description="{{ tableau.description }}" data-keywords="{{ tableau.keywords }}" data-dimension="{{ tableau.dimension }}" data-forsale="{{ tableau.forsale ? 'Oui':'Non' }}" data-aria-label="{{ tableau.ariaLabel }}">
 					<img src="{{ asset('images/preview/' ~ tableau.preview) }}" alt="{{ tableau.ariaLabel }}">
 
 					<div class="image-title">

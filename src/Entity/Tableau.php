@@ -55,6 +55,9 @@ class Tableau
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $preview = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $display = null;
+
     #[ORM\Column(length: 255, nullable: true, unique: true)]
     #[Assert\Length(min: 3)]
     #[Assert\Regex('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', message: 'Invalid Slug')]
@@ -239,6 +242,18 @@ class Tableau
     public function setPreview(string $preview): static
     {
         $this->preview = $preview;
+
+        return $this;
+    }
+
+    public function getDisplay(): ?string
+    {
+        return $this->display;
+    }
+
+    public function setDisplay(?string $display): static
+    {
+        $this->display = $display;
 
         return $this;
     }

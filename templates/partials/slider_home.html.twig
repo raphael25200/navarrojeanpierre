@@ -6,7 +6,7 @@
 
 			{% for tableau in tableaux %}
 				<div class="swiper-slide slide">
-					<div class="slide-image" style="background-image: url('{{ asset('images/images_sources/' ~ tableau.image) }}');"></div>
+					<div class="slide-image" style="background-image: url('{{ asset('images/' ~ (tableau.display ? 'display/' ~ tableau.display : 'images_sources/' ~ tableau.image)) }}');"></div>
 					<h2 class="slide-title">{{ tableau.customTitle is not empty ? tableau.customTitle : tableau.title }}</h2>
 				</div>
 			{% else %}

@@ -1,0 +1,121 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Génération images (WebP + display) par lot
+{% endblock %}
+
+{% block body %}
+	<div class="my-5">
+		<h1>Génération images par lot</h1>
+
+		<div class="row mb-4">
+			<div class="col-md-3">
+				<label for="start" class="form-label">N° tableau début</label>
+				<input type="number" id="start" class="form-control" value="1">
+			</div>
+			<div class="col-md-3">
+				<label for="end" class="form-label">N° tableau fin</label>
+				<input type="number" id="end" class="form-control" value="10">
+			</div>
+			<div class="col-md-3 d-flex align-items-end">
+				<button id="btn-start" class="btn btn-primary" onclick="startBatch()">Lancer</button>
+				<button id="btn-stop" class="btn btn-danger ms-2" onclick="stopBatch()" style="display:none;">Arrêter</button>
+			</div>
+		</div>
+
+		<div class="progress mb-3" style="display:none;" id="progress-wrapper">
+			<div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%">0%</div>
+		</div>
+
+		<div id="log" class="border rounded p-3 bg-light" style="max-height: 500px; overflow-y: auto;"></div>
+	</div>
+
+	<script>
+		let running = false;
+
+function stopBatch() {
+running = false;
+document.getElementById('btn-stop').style.display = 'none';
+document.getElementById('btn-start').disabled = false;
+addLog('⏹️ Arrêté par l\'utilisateur.', 'warning');
+}
+
+async function startBatch() {
+const start = parseInt(document.getElementById('start').value);
+const end = parseInt(document.getElementById('end').value);
+
+if (start > end) {
+alert('Le N° début doit être inférieur au N° fin.');
+return;
+}
+
+running = true;
+document.getElementById('btn-start').disabled = true;
+document.getElementById('btn-stop').style.display = 'inline-block';
+document.getElementById('progress-wrapper').style.display = 'flex';
+document.getElementById('log').innerHTML = '';
+
+const total = end - start + 1;
+let success = 0;
+let errors = 0;
+let skipped = 0;
+
+for (let num = start; num <= end; num++) {
+if (! running) 
+break;
+
+
+try {
+const response = await fetch (`/admin/tableaux/generate-images/${num}`, {
+method: 'POST',
+headers: {
+'X-Requested-With': 'XMLHttpRequest'
+}
+});
+
+if (response.status === 404) {
+skipped++;
+addLog (`#${num} — N° tableau non trouvé, ignoré.`, 'muted');
+} else {
+const data = await response.json();
+if (data.success) {
+success++;
+addLog(`✅ N°${
+data.numero
+} — ${
+data.title
+}`, 'success');
+} else {
+errors++;
+addLog(`❌ N°${num} — ${
+data.message
+}`, 'danger');
+}
+}
+} catch (e) {
+errors++;
+addLog(`❌ N°${num} — Erreur réseau : ${
+e.message
+}`, 'danger');
+}
+
+const done = (num - start + 1);
+const pct = Math.round((done / total) * 100);
+document.getElementById('progress-bar').style.width = pct + '%';
+document.getElementById('progress-bar').textContent = `${pct}% (${done}/${total})`;
+
+await new Promise(r => setTimeout(r, 1000));
+}
+
+addLog(`\n🏁 Terminé : ${success} réussi(s), ${errors} erreur(s), ${skipped} ignoré(s).`, 'primary');
+document.getElementById('btn-start').disabled = false;
+document.getElementById('btn-stop').style.display = 'none';
+running = false;
+}
+
+function addLog(text, color = 'dark') {
+const log = document.getElementById('log');
+log.innerHTML += `<div class="text-${color}">${text}</div>`;
+log.scrollTop = log.scrollHeight;
+}
+	</script>
+{% endblock %}

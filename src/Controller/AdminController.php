@@ -2,12 +2,9 @@
 
 namespace App\Controller;
 
-use index;
 use App\Entity\Avis;
 use App\Entity\Tableau;
-use App\Data\SearchData;
 use App\Entity\Category;
-use App\Form\SearchForm;
 use App\Form\TableauType;
 use App\Form\CategoryType;
 use App\Repository\AvisRepository;
@@ -16,13 +13,11 @@ use App\Service\ImageAnalyzerService;
 use App\Service\ImageUploaderService;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -395,6 +390,39 @@ final class AdminController extends AbstractController
                 'aria_label' => $result['aria_label'],
             ]);
         } catch (\Exception $e) {
+            return new JsonResponse(['error' => true, 'message' => $e->getMessage()]);
+        }
+    }
+    #[Route('/tableaux/batch-images', name: '.tableau.batch_images', methods: ['GET'])]
+    public function batchImagesForm(): Response
+    {
+        return $this->render('admin/tableau/batch_images.html.twig');
+    }
+
+    #[Route('/tableaux/generate-images/{numero}', name: '.tableau.generate_images', methods: ['POST'])]
+    public function generateImages(int $numero, TableauRepository $repository, ImageUploaderService $imageUploader, EntityManagerInterface $em): JsonResponse
+    {
+        $tableau = $repository->findOneBy(['numero_tableau' => $numero]);
+
+        if (!$tableau) {
+            return new JsonResponse(['error' => true, 'message' => 'Œuvre non trouvée.'], 404);
+        }
+
+        try {
+            $success = $imageUploader->regenerateVariantsFromSource($tableau);
+
+            if (!$success) {
+                return new JsonResponse(['error' => true, 'message' => 'Image source introuvable.']);
+            }
+
+            $em->flush();
+
+            return new JsonResponse([
+                'success' => true,
+                'numero' => $numero,
+                'title' => $tableau->getTitle(),
+            ]);
+        } catch (\Throwable $e) {
             return new JsonResponse(['error' => true, 'message' => $e->getMessage()]);
         }
     }
