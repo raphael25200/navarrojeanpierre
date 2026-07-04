@@ -25,6 +25,10 @@
 						"@type": "Person",
 						"name": "Jean-Pierre Navarro"
 					},
+					"creator": {
+						"@type": "Person",
+						"name": "Jean-Pierre Navarro"
+					},
 					"artform": "Peinture",
 		{% if tableau.category %}
 			"artworkSurface":
@@ -40,70 +44,181 @@
 		"image": "{{ absolute_url(asset('images/images_sources/' ~ tableau.image)) }}",
 		{% if tableau.forsale %}
 			"offers": {
-							"@type": "Offer",
-							"availability": "https://schema.org/InStock"
-						},
+								"@type": "Offer",
+								"availability": "https://schema.org/InStock"
+							},
 		{% endif %}
 		"url": "{{ url('oeuvre.show', {slug: tableau.slug}) }}"
+				}
+	</script>
+
+	<script type="application/ld+json">
+		{
+					"@context": "https://schema.org",
+					"@type": "BreadcrumbList",
+					"itemListElement": [
+						{
+							"@type": "ListItem",
+							"position": 1,
+							"name": "Accueil",
+							"item": "{{ url('home') }}"
+						}
+		{% if tableau.category %},
+							{
+								"@type": "ListItem",
+								"position": 2,
+								"name":
+			{{ tableau.category.name|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }},
+								"item": "{{ url('oeuvres.category_view', {slug: tableau.category.slug}) }}"
+							},
+							{
+								"@type": "ListItem",
+								"position": 3,
+								"name":
+			{{ tableau.title|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }},
+								"item": "{{ url('oeuvre.show', {slug: tableau.slug}) }}"
+							}
+			{% else %},
+							{
+								"@type": "ListItem",
+								"position": 2,
+								"name":
+			{{ tableau.title|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }},
+								"item": "{{ url('oeuvre.show', {slug: tableau.slug}) }}"
+							}
+		{% endif %}
+		]
 				}
 	</script>
 {% endblock %}
 
 {% block body %}
-	<article class="oeuvre-detail my-5">
-		<div class="row">
-			<div class="col-lg-8">
-				<img src="{{ asset('images/images_sources/' ~ tableau.image) }}" alt="{{ tableau.ariaLabel|default(tableau.title) }}" class="img-fluid w-100" loading="eager">
-			</div>
-			<div class="col-lg-4">
-				<h1>{{ tableau.title }}</h1>
+	<article
+		class="oeuvre-detail">
 
+		{# Fil d'Ariane — UX + maillage interne #}
+		<nav aria-label="Fil d'Ariane">
+			<ol class="breadcrumb oeuvre-breadcrumb">
+				<li class="breadcrumb-item">
+					<a href="{{ path('home') }}">Accueil</a>
+				</li>
 				{% if tableau.category %}
-					<p class="text-muted">
-						<a href="{{ path('oeuvres.category_view', {slug: tableau.category.slug}) }}">
+					<li class="breadcrumb-item">
+						<a href="{{ path('oeuvres.category_view', {slug: tableau.category.slug}) }}">{{ tableau.category.name }}</a>
+					</li>
+				{% endif %}
+				<li class="breadcrumb-item active" aria-current="page">{{ tableau.title }}</li>
+			</ol>
+		</nav>
+
+		<div
+			class="row g-4 g-lg-5 align-items-start">
+
+			{# Image #}
+			<div class="col-12 col-lg-7">
+				<figure class="oeuvre-figure">
+					<img src="{{ asset('images/images_sources/' ~ tableau.image) }}" alt="{{ tableau.ariaLabel|default(tableau.title) }}" class="oeuvre-image" loading="eager">
+				</figure>
+			</div>
+
+			{# Informations #}
+			<div class="col-12 col-lg-5">
+				<div class="oeuvre-infos">
+
+					<h1 class="oeuvre-title">{{ tableau.title }}</h1>
+
+					{% if tableau.category %}
+						<a href="{{ path('oeuvres.category_view', {slug: tableau.category.slug}) }}" class="oeuvre-category">
 							{{ tableau.category.name }}
 						</a>
-					</p>
-				{% endif %}
+					{% endif %}
 
-				{% if tableau.date %}
-					<p>
-						<strong>Année :</strong>
-						{{ tableau.date|date('Y') }}</p>
-				{% endif %}
+					{% if tableau.date or tableau.dimension %}
+						<dl class="oeuvre-meta">
+							{% if tableau.date %}
+								<div>
+									<dt>Année</dt>
+									<dd>{{ tableau.date|date('Y') }}</dd>
+								</div>
+							{% endif %}
+							{% if tableau.dimension %}
+								<div>
+									<dt>Dimensions</dt>
+									<dd>{{ tableau.dimension }}</dd>
+								</div>
+							{% endif %}
+						</dl>
+					{% endif %}
 
-				{% if tableau.dimension %}
-					<p>
-						<strong>Dimensions :</strong>
-						{{ tableau.dimension }}</p>
-				{% endif %}
+					{% if tableau.description %}
+						<section class="oeuvre-section">
+							<h2 class="oeuvre-subtitle">Description</h2>
+							<p>{{ tableau.description }}</p>
+						</section>
+					{% endif %}
 
-				{% if tableau.commentaires %}
-					<div class="mt-3">
-						<h2 class="h5">Notes de l'artiste</h2>
-						<p>{{ tableau.commentaires }}</p>
+					{% if tableau.commentaires %}
+						<section class="oeuvre-section">
+							<h2 class="oeuvre-subtitle">Notes de l'artiste</h2>
+							<p>{{ tableau.commentaires }}</p>
+						</section>
+					{% endif %}
+
+					{% if tableau.forsale %}
+						<div class="oeuvre-actions">
+							<a href="{{ path('contact') }}" class="btn btn-dark btn-lg">Acquérir cette œuvre</a>
+						</div>
+					{% endif %}
+
+					<div class="oeuvre-back">
+						<a href="{{ path('oeuvres.search') }}">← Retour aux œuvres</a>
 					</div>
-				{% endif %}
 
-				{% if tableau.description %}
-					<div class="mt-3">
-						<h2 class="h5">Description</h2>
-						<p>{{ tableau.description }}</p>
-					</div>
-				{% endif %}
-
-				{% if tableau.forsale %}
-					<div class="mt-4">
-						<a href="{{ path('contact') }}" class="btn btn-outline-dark">
-							Acquérir cette œuvre
-						</a>
-					</div>
-				{% endif %}
-
-				<div class="mt-4">
-					<a href="{{ path('oeuvres.search') }}">← Retour aux œuvres</a>
 				</div>
 			</div>
+
 		</div>
+
+		{# Navigation œuvre précédente / suivante (par date) #}
+		{% if previous or next %}
+			<nav class="oeuvre-nav" aria-label="Navigation entre les œuvres">
+				{% if previous %}
+					<a href="{{ path('oeuvre.show', {slug: previous.slug}) }}" class="oeuvre-nav-prev" rel="prev">
+						<span aria-hidden="true">←</span>
+						<span class="oeuvre-nav-label">{{ previous.title }}</span>
+					</a>
+				{% endif %}
+				{% if next %}
+					<a href="{{ path('oeuvre.show', {slug: next.slug}) }}" class="oeuvre-nav-next" rel="next">
+						<span class="oeuvre-nav-label">{{ next.title }}</span>
+						<span aria-hidden="true">→</span>
+					</a>
+				{% endif %}
+			</nav>
+		{% endif %}
+
+		{# Œuvres similaires — maillage interne #}
+		{% if similar is not empty %}
+			<section class="oeuvre-similar" aria-label="Œuvres similaires">
+				<h2 class="oeuvre-similar-title">Œuvres similaires</h2>
+				<div class="similar-grid">
+					{% for oeuvre in similar %}
+						{% set thumb = oeuvre.preview ? asset('images/preview/' ~ oeuvre.preview) : asset('images/images_sources/' ~ oeuvre.image) %}
+						<a href="{{ path('oeuvre.show', {slug: oeuvre.slug}) }}" class="similar-item">
+							<span class="similar-thumb">
+								<img src="{{ thumb }}" alt="{{ oeuvre.ariaLabel|default(oeuvre.title) }}" loading="lazy">
+							</span>
+							<span class="similar-caption">
+								<span class="similar-name">{{ oeuvre.title }}</span>
+								{% if oeuvre.category %}
+									<span class="similar-cat">{{ oeuvre.category.name }}</span>
+								{% endif %}
+							</span>
+						</a>
+					{% endfor %}
+				</div>
+			</section>
+		{% endif %}
+
 	</article>
 {% endblock %}

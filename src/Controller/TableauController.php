@@ -7,7 +7,6 @@ use App\Form\AvisType;
 use App\Entity\Tableau;
 use App\Data\SearchData;
 use App\Form\SearchForm;
-use App\Repository\AvisRepository;
 use App\Repository\TableauRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -167,6 +166,9 @@ class TableauController extends AbstractController
 
         return $this->render('oeuvres/show.html.twig', [
             'tableau' => $tableau,
+            'similar' => $repository->findSimilar($tableau, 4),
+            'previous' => $repository->findPrevious($tableau),
+            'next' => $repository->findNext($tableau),
         ]);
     }
 }

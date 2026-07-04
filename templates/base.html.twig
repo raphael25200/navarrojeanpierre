@@ -13,7 +13,8 @@
 			<meta name="description" content="Découvrez l'œuvre de Jean-Pierre Navarro, peintre impressionniste autodidacte. Plus de 300 tableaux : paysages, portraits, natures mortes.">
 		{% endblock %}
 
-		{% block canonical %}{% endblock %}
+		{% block canonical %}<link rel="canonical" href="https://www.navarrojeanpierre.com{{ app.request.pathInfo }}">
+		{% endblock %}
 
 		{% block structured_data %}{% endblock %}
 
