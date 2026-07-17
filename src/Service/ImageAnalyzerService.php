@@ -99,6 +99,27 @@ ARIA-LABEL :
                 'json' => $data
             ]);
 
+            $statusCode = $response->getStatusCode();
+
+            // Gestion explicite du 429 AVANT toArray() : on lit le vrai corps de la réponse
+            // pour distinguer un problème de cadence (rate_limit_exceeded, réessai possible)
+            // d'un problème de quota (insufficient_quota, réessai inutile).
+            if ($statusCode === 429) {
+                $body = json_decode($response->getContent(false), true);
+                $errorType = $body['error']['type'] ?? 'unknown';
+                $errorMessage = $body['error']['message'] ?? 'Limite de requêtes OpenAI atteinte.';
+                $retryAfter = $response->getHeaders(false)['retry-after'][0] ?? null;
+
+                return [
+                    'description' => '',
+                    'keywords' => [],
+                    'aria_label' => '',
+                    'error' => $errorMessage,
+                    'error_type' => $errorType === 'insufficient_quota' ? 'quota' : 'rate_limit',
+                    'retry_after' => $retryAfter ? (int) $retryAfter : null,
+                ];
+            }
+
             $result = $response->toArray();
 
             if (isset($result['choices'][0]['message']['content'])) {

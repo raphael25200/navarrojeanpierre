@@ -346,13 +346,31 @@ final class AdminController extends AbstractController
         return $this->render('admin/tableau/batch.html.twig');
     }
 
+    private const MIN_DESCRIPTION_LENGTH = 40;
+
     #[Route('/tableaux/save-ai/{numero}', name: '.tableau.save_ai', methods: ['POST'])]
-    public function saveAI(int $numero, TableauRepository $repository, ImageAnalyzerService $analyzer, EntityManagerInterface $em): JsonResponse
+    public function saveAI(int $numero, Request $request, TableauRepository $repository, ImageAnalyzerService $analyzer, EntityManagerInterface $em): JsonResponse
     {
         $tableau = $repository->findOneBy(['numero_tableau' => $numero]);
 
         if (!$tableau) {
             return new JsonResponse(['error' => true, 'message' => 'Œuvre non trouvée.'], 404);
+        }
+
+        // Si demandé, on ignore les œuvres déjà réellement traitées (description assez longue
+        // pour ne pas être un simple texte placeholder type "à faire" / "à remplir")
+        $skipExisting = $request->query->getBoolean('skip_existing');
+        $alreadyProcessed = $tableau->getDescription()
+            && mb_strlen(trim($tableau->getDescription())) >= self::MIN_DESCRIPTION_LENGTH
+            && $tableau->getKeywords()
+            && $tableau->getAriaLabel();
+
+        if ($skipExisting && $alreadyProcessed) {
+            return new JsonResponse([
+                'skipped' => true,
+                'numero' => $numero,
+                'title' => $tableau->getTitle(),
+            ]);
         }
 
         $imageName = $tableau->getImage();
@@ -393,6 +411,7 @@ final class AdminController extends AbstractController
             return new JsonResponse(['error' => true, 'message' => $e->getMessage()]);
         }
     }
+
     #[Route('/tableaux/batch-images', name: '.tableau.batch_images', methods: ['GET'])]
     public function batchImagesForm(): Response
     {

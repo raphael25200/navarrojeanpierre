@@ -29,7 +29,7 @@ class ImageUploaderService
 
     public function uploadImage(Tableau $tableau): void
     {
-        ini_set('memory_limit', '256M');
+        ini_set('memory_limit', '512M');
 
         if (!$tableau->getImage()) {
             return;
@@ -62,6 +62,10 @@ class ImageUploaderService
 
         $imagine = new Imagine();
         $image = $imagine->open($sourcePath);
+
+        // Correction de l'orientation EXIF AVANT toute recompression
+        // (une fois recompressé par GD, le tag EXIF est perdu définitivement)
+        $image = $this->correctOrientation($image, $sourcePath);
 
         $image->save($sourcePath, [
             'jpeg_quality' => 75,
@@ -105,18 +109,48 @@ class ImageUploaderService
         return true;
     }
 
+    /**
+     * Lit l'orientation EXIF (si présente) et tourne physiquement l'image en conséquence.
+     * Sans effet si le fichier n'a pas de métadonnée EXIF ou si l'extension exif est absente.
+     */
+    private function correctOrientation(ImageInterface $image, string $path): ImageInterface
+    {
+        if (!function_exists('exif_read_data')) {
+            return $image;
+        }
+
+        if (!in_array(strtolower(pathinfo($path, PATHINFO_EXTENSION)), ['jpg', 'jpeg'])) {
+            return $image;
+        }
+
+        $exif = @exif_read_data($path);
+
+        if (!$exif || empty($exif['Orientation'])) {
+            return $image;
+        }
+
+        switch ($exif['Orientation']) {
+            case 3:
+                return $image->rotate(180);
+            case 6:
+                return $image->rotate(90);
+            case 8:
+                return $image->rotate(-90);
+            default:
+                return $image;
+        }
+    }
+
     public function generateVariants(Tableau $tableau, ImageInterface $image, string $fileName): void
     {
         $size = $image->getSize();
         $ratio = $size->getHeight() / $size->getWidth();
 
-        // Miniature (50x50) — usage admin uniquement
         $thumbnailPath = $this->thumbnailDir . 'thumb_' . $fileName;
         $thumbnailImage = $image->copy()->thumbnail(new Box(50, 50), ImageInterface::THUMBNAIL_OUTBOUND);
         $thumbnailImage->save($thumbnailPath, ['jpeg_quality' => 80]);
         $tableau->setThumbnail('thumb_' . $fileName);
 
-        // Preview (600px) — mosaïque + œuvres similaires
         $previewWidth = 600;
         $previewHeight = (int) ($previewWidth * $ratio);
         $previewFileName = 'prev_' . $fileName;
@@ -127,7 +161,6 @@ class ImageUploaderService
         $this->saveAsWebp($previewImage, $this->previewDir . $this->toWebp($previewFileName));
         $tableau->setPreview($previewFileName);
 
-        // Display (2400px) — page œuvre en pleine largeur
         $displayWidth = 2400;
         $displayHeight = (int) ($displayWidth * $ratio);
         $displayFileName = 'disp_' . $fileName;

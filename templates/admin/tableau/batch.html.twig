@@ -1,110 +1,175 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Génération IA par lot{% endblock %}
+{% block title %}Génération IA par lot
+{% endblock %}
 
 {% block body %}
-<div class="my-5">
-    <h1>Génération IA par lot</h1>
+	<div class="my-5">
+		<h1>Génération IA par lot</h1>
 
-    <div class="row mb-4">
-        <div class="col-md-3">
-            <label for="start" class="form-label">N° tableau début</label>
-            <input type="number" id="start" class="form-control" value="1">
-        </div>
-        <div class="col-md-3">
-            <label for="end" class="form-label">N° tableau fin</label>
-            <input type="number" id="end" class="form-control" value="10">
-        </div>
-        <div class="col-md-3 d-flex align-items-end">
-            <button id="btn-start" class="btn btn-primary" onclick="startBatch()">Lancer</button>
-            <button id="btn-stop" class="btn btn-danger ms-2" onclick="stopBatch()" style="display:none;">Arrêter</button>
-        </div>
-    </div>
+		<div class="row mb-4">
+			<div class="col-md-3">
+				<label for="start" class="form-label">N° tableau début</label>
+				<input type="number" id="start" class="form-control" value="1">
+			</div>
+			<div class="col-md-3">
+				<label for="end" class="form-label">N° tableau fin</label>
+				<input type="number" id="end" class="form-control" value="10">
+			</div>
+			<div class="col-md-3 d-flex align-items-end">
+				<button id="btn-start" class="btn btn-primary" onclick="startBatch()">Lancer</button>
+				<button id="btn-stop" class="btn btn-danger ms-2" onclick="stopBatch()" style="display:none;">Arrêter</button>
+			</div>
+		</div>
 
-    <div class="progress mb-3" style="display:none;" id="progress-wrapper">
-        <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%">0%</div>
-    </div>
+		<div class="form-check mb-4">
+			<input class="form-check-input" type="checkbox" id="skip-existing" checked>
+			<label class="form-check-label" for="skip-existing">
+				Ignorer les œuvres déjà traitées (description + mots-clés + aria-label déjà remplis)
+			</label>
+		</div>
 
-    <div id="log" class="border rounded p-3 bg-light" style="max-height: 500px; overflow-y: auto;"></div>
-</div>
+		<div class="progress mb-3" style="display:none;" id="progress-wrapper">
+			<div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%">0%</div>
+		</div>
 
-<script>
-let running = false;
+		<div id="log" class="border rounded p-3 bg-light" style="max-height: 500px; overflow-y: auto;"></div>
+	</div>
+
+	<script>
+		let running = false;
 
 function stopBatch() {
-    running = false;
-    document.getElementById('btn-stop').style.display = 'none';
-    document.getElementById('btn-start').disabled = false;
-    addLog('⏹️ Arrêté par l\'utilisateur.', 'warning');
+running = false;
+document.getElementById('btn-stop').style.display = 'none';
+document.getElementById('btn-start').disabled = false;
+addLog('⏹️ Arrêté par l\'utilisateur.', 'warning');
+}
+
+async function callSaveAI(num, skipExisting) {
+const url = `/admin/tableaux/save-ai/${num}${
+skipExisting ? '?skip_existing=1' : ''
+}`;
+const response = await fetch(url, {
+method: 'POST',
+headers: {
+'X-Requested-With': 'XMLHttpRequest'
+}
+});
+
+if (response.status === 404) {
+return {notFound: true};
+}
+
+return await response.json();
 }
 
 async function startBatch() {
-    const start = parseInt(document.getElementById('start').value);
-    const end = parseInt(document.getElementById('end').value);
+const start = parseInt(document.getElementById('start').value);
+const end = parseInt(document.getElementById('end').value);
+const skipExisting = document.getElementById('skip-existing').checked;
 
-    if (start > end) {
-        alert('Le N° début doit être inférieur au N° fin.');
-        return;
-    }
+if (start > end) {
+alert('Le N° début doit être inférieur au N° fin.');
+return;
+}
 
-    running = true;
-    document.getElementById('btn-start').disabled = true;
-    document.getElementById('btn-stop').style.display = 'inline-block';
-    document.getElementById('progress-wrapper').style.display = 'flex';
-    document.getElementById('log').innerHTML = '';
+running = true;
+document.getElementById('btn-start').disabled = true;
+document.getElementById('btn-stop').style.display = 'inline-block';
+document.getElementById('progress-wrapper').style.display = 'flex';
+document.getElementById('log').innerHTML = '';
 
-    const total = end - start + 1;
-    let success = 0;
-    let errors = 0;
-    let skipped = 0;
+const total = end - start + 1;
+let success = 0;
+let errors = 0;
+let notFound = 0;
+let alreadyDone = 0;
+const MAX_RETRIES = 4;
 
-    for (let num = start; num <= end; num++) {
-        if (!running) break;
+for (let num = start; num <= end; num++) {
+if (! running) 
+break;
 
-        try {
-            const response = await fetch(`/admin/tableaux/save-ai/${num}`, {
-                method: 'POST',
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }
-            });
 
-            if (response.status === 404) {
-                skipped++;
-                addLog(`#${num} — N° tableau non trouvé, ignoré.`, 'muted');
-            } else {
-                const data = await response.json();
-                if (data.success) {
-                    success++;
-                    addLog(`✅ N°${data.numero} — ${data.title}`, 'success');
-                } else {
-                    errors++;
-                    addLog(`❌ N°${num} — ${data.message}`, 'danger');
-                }
-            }
-        } catch (e) {
-            errors++;
-            addLog(`❌ N°${num} — Erreur réseau : ${e.message}`, 'danger');
-        }
+let attempt = 0;
+let data = null;
 
-        // Mise à jour barre de progression
-        const done = (num - start + 1);
-        const pct = Math.round((done / total) * 100);
-        document.getElementById('progress-bar').style.width = pct + '%';
-        document.getElementById('progress-bar').textContent = `${pct}% (${done}/${total})`;
+while (attempt <= MAX_RETRIES && running) {
+try {
+data = await callSaveAI(num, skipExisting);
+} catch (e) {
+data = {
+error: true,
+message: `Erreur réseau : ${
+e.message
+}`
+};
+}
 
-        // Pause de 1 seconde entre chaque appel
-        await new Promise(r => setTimeout(r, 1000));
-    }
+// Retry uniquement si c'est un problème de cadence (rate_limit), pas de quota
+if (data && data.error_type === 'rate_limit' && attempt < MAX_RETRIES) {
+const wait = data.retry_after ? (data.retry_after * 1000) : (5000 * (attempt + 1));
+addLog(`⏳ N°${num} — Limite de cadence OpenAI, nouvelle tentative dans ${
+Math.round(wait / 1000)
+}s...`, 'warning');
+await new Promise(r => setTimeout(r, wait));
+attempt++;
+continue;
+}
 
-    addLog(`\n🏁 Terminé : ${success} réussi(s), ${errors} erreur(s), ${skipped} ignoré(s).`, 'primary');
-    document.getElementById('btn-start').disabled = false;
-    document.getElementById('btn-stop').style.display = 'none';
-    running = false;
+break;
+}
+
+if (data && data.notFound) {
+notFound++;
+addLog (`#${num} — N° tableau non trouvé, ignoré.`, 'muted');
+} else if (data && data.skipped) {
+alreadyDone++;
+addLog(`⏭️ N°${
+data.numero
+} — ${
+data.title
+} : déjà traité, ignoré.`, 'muted');
+} else if (data && data.success) {
+success++;
+addLog(`✅ N°${
+data.numero
+} — ${
+data.title
+}`, 'success');
+} else if (data && data.error_type === 'quota') {
+errors++;
+addLog(`🛑 N°${num} — Quota OpenAI épuisé : ${
+data.message
+}. Arrêt recommandé.`, 'danger');
+} else {
+errors++;
+addLog(`❌ N°${num} — ${
+data ? data.message : 'Erreur inconnue'
+}`, 'danger');
+}
+
+// Mise à jour barre de progression
+const done = (num - start + 1);
+const pct = Math.round((done / total) * 100);
+document.getElementById('progress-bar').style.width = pct + '%';
+document.getElementById('progress-bar').textContent = `${pct}% (${done}/${total})`;
+
+// Pause entre chaque appel
+await new Promise(r => setTimeout(r, 3000));
+}
+
+addLog(`\n🏁 Terminé : ${success} traité(s), ${alreadyDone} déjà fait(s) ignoré(s), ${errors} erreur(s), ${notFound} numéro(s) introuvable(s).`, 'primary');
+document.getElementById('btn-start').disabled = false;
+document.getElementById('btn-stop').style.display = 'none';
+running = false;
 }
 
 function addLog(text, color = 'dark') {
-    const log = document.getElementById('log');
-    log.innerHTML += `<div class="text-${color}">${text}</div>`;
-    log.scrollTop = log.scrollHeight;
+const log = document.getElementById('log');
+log.innerHTML += `<div class="text-${color}">${text}</div>`;
+log.scrollTop = log.scrollHeight;
 }
-</script>
+	</script>
 {% endblock %}
